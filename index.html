@@ -62,7 +62,7 @@ input[type="submit"]:hover {
 <body>
   
   
-  <form id="financial-tracker-form">
+<form id="financial-tracker-form">
   <label for="date">Date:</label><br>
   <input type="date" id="date"><br>
   <label for="days-of-payment">Days of Payment:</label><br>
@@ -86,245 +86,161 @@ input[type="submit"]:hover {
   <input type="checkbox" id="options-of-payment" name="options-of-payment" value="option3">Option 3<br>
   <input type="submit" value="Submit">
 </form>
+
+
+
+
+
+<form>
+  <button type="button" onclick="displayBalance()">Display Balance</button>
+</form>
+<div id="balance"></div>
+
+
+
+  
+<script>
+  // Save data to local storage
+  function saveData(event) {
+    // Prevent the form from being submitted and causing the page to refresh
+    event.preventDefault();
+
+    // Get form values
+    var date = document.getElementById("date").value;
+    var daysOfPayment = document.getElementById("days-of-payment").value;
+    var amount = document.getElementById("amount").value;
+    var referenceOfPayment = document.getElementById("reference-of-payment").value;
+    var type = document.querySelector('input[name="type"]:checked').value;
+    var name = document.getElementById("name").value;
+    var optionsOfPayment = document.querySelectorAll('input[name="options-of-payment"]:checked');
+
+    // Create an object to hold the form values
+    var entry = {
+      date: date,
+      daysOfPayment: daysOfPayment,
+      amount: amount,
+      referenceOfPayment: referenceOfPayment,
+      type: type,
+      name: name,
+      optionsOfPayment: optionsOfPayment
+    };
+
+    // Save the entry object in local storage
+    localStorage.setItem(date, JSON.stringify(entry));
+  }
+
+  // Add the saveData function as a submit event handler for the form
+  var form = document.getElementById("financial-tracker-form");
+  form.addEventListener("submit", saveData);
+
+  // Display the current balance
+  function displayBalance() {
+    // Initialize the balance to 0
+    var balance = 0;
+
+    // Get all the stored data
+    for (var i = 0; i < localStorage.length; i++) {
+      var key = localStorage.key(i);
+      var entry = JSON.parse(localStorage.getItem(key));
+
+      // Add the amount to the balance if it is an input, or subtract it if it is an output
+      if (entry.type === "input") {
+        balance += entry.amount;
+      } else if (entry.type === "output") {
+        balance -= entry.amount;
+      }
+    }
+
+    // Display the balance
+    var balanceDiv = document.getElementById("balance");
+    balanceDiv.innerHTML = "Balance: $" + balance.toFixed(2);
+  }
+
+  // Display the history of financial operations
+  function displayHistory() {
+    // Create the table element
+    var table = document.createElement("table");
+    table.classList.add("table");
+
+    // Create the table head
+    var thead = document.createElement("thead");
+    var headRow = document.createElement("tr");
+    var dateHeading = document.createElement("th");
+    dateHeading.innerHTML = "Date";
+    headRow.appendChild(dateHeading);
+    var daysOfPaymentHeading = document.createElement("th");
+    daysOfPaymentHeading.innerHTML = "Days of Payment";
+    headRow.appendChild(daysOfPaymentHeading);
+    var amountHeading = document.createElement("th");
+    amountHeading.innerHTML = "Amount";
+    headRow.appendChild(amountHeading);
+    var referenceOfPaymentHeading = document.createElement("th");
+    referenceOfPaymentHeading.innerHTML = "Reference of Payment";
+    headRow.appendChild(referenceOfPaymentHeading);
+    var typeHeading = document.createElement("th");
+    typeHeading.innerHTML = "Type";
+    headRow.appendChild(typeHeading);
+    var nameHeading = document.createElement("th");
+    nameHeading.innerHTML = "Name";
+    headRow.appendChild(nameHeading);
+    var optionsOfPaymentHeading = document.createElement("th");
+    optionsOfPaymentHeading.innerHTML = "Options of Payment";
+    headRow.appendChild(optionsOfPaymentHeading);
+    thead.appendChild(headRow);
+    table.appendChild(thead);
+
+    // Create the table body
+    var tbody = document.createElement("tbody");
+
+    // Add a row for each entry in local storage
+    for (var i = 0; i < localStorage.length; i++) {
+      var key = localStorage.key(i);
+      var entry = JSON.parse(localStorage.getItem(key));
+
+      var row = document.createElement("tr");
+      var dateCell = document.createElement("td");
+      dateCell.innerHTML = entry.date;
+      row.appendChild(dateCell);
+      var daysOfPaymentCell = document.createElement("td");
+      daysOfPaymentCell.innerHTML = entry.daysOfPayment;
+      row.appendChild(daysOfPaymentCell);
+      var amountCell = document.createElement("td");
+      amountCell.innerHTML = "$" + entry.amount.toFixed(2);
+      row.appendChild(amountCell);
+      var referenceOfPaymentCell = document.createElement("td");
+      referenceOfPaymentCell.innerHTML = entry.referenceOfPayment;
+      row.appendChild(referenceOfPaymentCell);
+      var typeCell = document.createElement("td");
+      typeCell.innerHTML = entry.type;
+      row.appendChild(typeCell);
+      var nameCell = document.createElement("td");
+      nameCell.innerHTML = entry.name;
+      row.appendChild(nameCell);
+      var optionsOfPaymentCell = document.createElement("td");
+      optionsOfPaymentCell.innerHTML = entry.optionsOfPayment.map(function(option) { return option.value; }).join(", ");
+      row.appendChild(optionsOfPaymentCell);
+      tbody.appendChild(row);
+    }
+
+    table.appendChild(tbody);
+
+    // Add the table to the page
+    var historyDiv = document.getElementById("history");
+
+historyDiv.innerHTML = "";
+    historyDiv.appendChild(table);
+  }
+</script>
   
   
 <!-- Display the balance -->
-<button onclick="displayBalanceTable()">Display Balance</button>
+<button onclick="displayBalance()">Display Balance</button>
 <div id="balance"></div>
+
 <!-- Display the history of financial operations -->
 <button onclick="displayHistory()">Display History</button>
+<div id="history"></div>
   
 </body>
 </html>
-
-<script>
-  
-// Save data to local storage
-function saveData() {
-  // Get form values
-  var date = document.getElementById("date").value;
-  var daysOfPayment = document.getElementById("days-of-payment").value;
-  var amount = document.getElementById("amount").value;
-  var referenceOfPayment = document.getElementById("reference-of-payment").value;
-  var type = document.querySelector('input[name="type"]:checked').value;
-  var name = document.getElementById("name").value;
-  var optionsOfPayment = [];
-  var optionsOfPaymentElements = document.querySelectorAll('input[name="options-of-payment"]:checked');
-  for (var i = 0; i < optionsOfPaymentElements.length; i++) {
-    optionsOfPayment.push(optionsOfPaymentElements[i].value);
-  }
-  
-  // Save form values to an object
-  var financialData = {
-    "date": date,
-    "daysOfPayment": daysOfPayment,
-    "amount": amount,
-    "referenceOfPayment": referenceOfPayment,
-    "type": type,
-    "name": name,
-    "optionsOfPayment": optionsOfPayment
-  };
-  
-  // Save the object to local storage
-  localStorage.setItem("financialData", JSON.stringify(financialData));
-}
-
-// Get data from local storage
-function getData() {
-  // Retrieve the object from local storage
-  var financialData = JSON.parse(localStorage.getItem("financialData"));
-  
-  // Use the object data to populate the form fields
-  document.getElementById("date").value = financialData.date;
-  document.getElementById("days-of-payment").value = financialData.daysOfPayment;
-  document.getElementById("amount").value = financialData.amount;
-  document.getElementById("reference-of-payment").value = financialData.referenceOfPayment;
-  document.querySelector('input[name="type"][value="' + financialData.type + '"]').checked = true;
-  document.getElementById("name").value = financialData.name;
-  for (var i = 0; i < financialData.optionsOfPayment.length; i++) {
-    document.querySelector('input[name="options-of-payment"][value="' + financialData.optionsOfPayment[i] + '"]').checked = true;
-  }
-}
-
-// Check if local storage is supported
-if (localStorage) {
-  // Retrieve data from local storage on page load
-  getData();
-  
-  // Save data to local storage on form submission
-  document.getElementById("financial-tracker-form").addEventListener("submit", function(event) {
-    event.preventDefault();
-    saveData();
-  });
-}
-
-  
-  
-  function displayBalanceTable() {
-  // Get the financial data from local storage
-  var financialData = JSON.parse(localStorage.getItem("financialData"));
-  
-  // Calculate the balance
-  var balance = 0;
-  for (var i = 0; i < financialData.length; i++) {
-    if (financialData[i].type === "input") {
-      balance += financialData[i].amount;
-    } else {
-      balance -= financialData[i].amount;
-    }
-  }
-  
-  // Create a table element
-  var table = document.createElement("table");
-  table.classList.add("table");
-  
-  // Create a table row for the headings
-  var headingsRow = document.createElement("tr");
-  
-  // Create table headings
-  var dateHeading = document.createElement("th");
-  dateHeading.textContent = "Date";
-  headingsRow.appendChild(dateHeading);
-  
-  var incomeHeading = document.createElement("th");
-  incomeHeading.textContent = "Income";
-  headingsRow.appendChild(incomeHeading);
-  
-  var expensesHeading = document.createElement("th");
-  expensesHeading.textContent = "Expenses";
-  headingsRow.appendChild(expensesHeading);
-  
-  var balanceHeading = document.createElement("th");
-  balanceHeading.textContent = "Balance";
-  headingsRow.appendChild(balanceHeading);
-  
-  // Add the headings row to the table
-  table.appendChild(headingsRow);
-  
-  // Add a row for each day
-  for (var i = 0; i < financialData.length; i++) {
-    // Create a table row
-    var row = document.createElement("tr");
-    
-    // Create a table cell for the date
-    var dateCell = document.createElement("td");
-    dateCell.textContent = financialData[i].date;
-    row.appendChild(dateCell);
-    
-    // Create a table cell for the income or expenses
-    var amountCell = document.createElement("td");
-    if (financialData[i].type === "input") {
-      amountCell.textContent = financialData[i].amount;
-    } else {
-      amountCell.textContent = "-" + financialData[i].amount;
-    }
-    row.appendChild(amountCell);
-    
-    // Create a table cell for the balance
-    var balanceCell = document.createElement("td");
-    balanceCell.textContent = balance;
-    row.appendChild(balanceCell);
-    
-    // Add the row to the table
-    table.appendChild(row);
-  }
-  
-  // Add the table to the page
-  document.body.appendChild(table);
-}
-  
-  
-function displayHistory() {
-  // Get the financial data from local storage
-  var financialData = JSON.parse(localStorage.getItem("financialData"));
-  
-  // Create a table element
-  var table = document.createElement("table");
-  table.classList.add("table");
-  
-  // Create a table row for the headings
-  var headingsRow = document.createElement("tr");
-  
-  // Create table headings
-  var dateHeading = document.createElement("th");
-  dateHeading.textContent = "Date";
-  headingsRow.appendChild(dateHeading);
-  
-  var daysOfPaymentHeading = document.createElement("th");
-  daysOfPaymentHeading.textContent = "Days of Payment";
-  headingsRow.appendChild(daysOfPaymentHeading);
-  
-  var amountHeading = document.createElement("th");
-  amountHeading.textContent = "Amount";
-  headingsRow.appendChild(amountHeading);
-  
-  var referenceOfPaymentHeading = document.createElement("th");
-  referenceOfPaymentHeading.textContent = "Reference of Payment";
-  headingsRow.appendChild(referenceOfPaymentHeading);
-  
-  var typeHeading = document.createElement("th");
-  typeHeading.textContent = "Type";
-  headingsRow.appendChild(typeHeading);
-  
-  var nameHeading = document.createElement("th");
-  nameHeading.textContent = "Name";
-  headingsRow.appendChild(nameHeading);
-  
-  var optionsOfPaymentHeading = document.createElement("th");
-  optionsOfPaymentHeading.textContent = "Options of Payment";
-  headingsRow.appendChild(optionsOfPaymentHeading);
-  
-  // Add the headings row to the table
-  table.appendChild(headingsRow);
-  
-  // Add a row for each financial operation
-  for (var i = 0; i < financialData.length; i++) {
-    // Create a table row
-    var row = document.createElement("tr");
-    
-    // Create a table cell for the date
-    var dateCell = document.createElement("td");
-    dateCell.textContent = financialData[i].date;
-    row.appendChild(dateCell);
-    
-    // Create a table cell for the days of payment
-    var daysOfPaymentCell = document.createElement("td");
-    daysOfPaymentCell.textContent = financialData[i].daysOfPayment;
-    row.appendChild(daysOfPaymentCell);
-    
-    // Create a table cell for the amount
-    var amountCell = document.createElement("td");
-    amountCell.textContent = financialData[i].amount;
-    row.appendChild(amountCell);
-    
-    // Create a table cell for the reference of payment
-    var referenceOfPaymentCell = document.createElement("td");
-    referenceOfPaymentCell.textContent = financialData[i].referenceOfPayment;
-    row.appendChild(referenceOfPaymentCell);
-    
-// Create a table cell for the type
-    var typeCell = document.createElement("td");
-    typeCell.textContent = financialData[i].type;
-    row.appendChild(typeCell);
-    
-    // Create a table cell for the name
-    var nameCell = document.createElement("td");
-    nameCell.textContent = financialData[i].name;
-    row.appendChild(nameCell);
-    
-    // Create a table cell for the options of payment
-    var optionsOfPaymentCell = document.createElement("td");
-    optionsOfPaymentCell.textContent = financialData[i].optionsOfPayment.join(", ");
-    row.appendChild(optionsOfPaymentCell);
-    
-    // Add the row to the table
-    table.appendChild(row);
-  }
-  
-  // Add the table to the page
-  document.body.appendChild(table);
-}  
-  
-
-</script>
 
