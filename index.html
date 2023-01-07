@@ -1,174 +1,62 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Financial Tracker</title>
-  
-  <style>
-  body {
-  font-family: sans-serif;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-}
-
-input, select {
-  padding: 0.5em;
-  margin: 0.5em 0;
-}
-
-table {
-  border-collapse: collapse;
-  width: 100%;
-}
-
-td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
-
-tr:nth-child(even) {
-  background-color: #dddddd;
-}
-
-  
-  </style>
+  <title>Financial Profession Tracker</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-  <div id="app">
-    <h1>Financial Tracker</h1>
-    <form>
-      <label for="date">Date:</label><br>
-      <input type="date" id="date"><br>
-      <label for="days-pending">Days Pending Before Payment:</label><br>
-      <input type="number" id="days-pending"><br>
-      <label for="amount">Amount:</label><br>
-      <input type="number" id="amount"><br>
-      <label for="reference">Reference:</label><br>
-      <input type="text" id="reference"><br>
-      <label for="type">Type:</label><br>
-      <select id="type">
-        <option value="input">Input</option>
-        <option value="output">Output</option>
-      </select><br>
-      <label for="name">Name:</label><br>
-      <input type="text" id="name"><br>
-      <label for="payment-option">Payment Option:</label><br>
-      <select id="payment-option">
-        <option value="cash">Cash</option>
-        <option value="card">Card</option>
-        <option value="bank-transfer">Bank Transfer</option>
-      </select><br><br>
-      <button type="submit">Add Transaction</button>
-    </form> 
-    <div id="transaction-history">
-      <h2>Transaction History</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Days Pending</th>
-            <th>Amount</th>
-            <th>Reference</th>
-            <th>Type</th>
-            <th>Name</th>
-            <th>Payment Option</th>
-          </tr>
-        </thead>
-        <tbody id="transaction-list">
-        </tbody>
-      </table>
-    </div>
+  <h1>Financial Profession Tracker</h1>
+  <form id="transaction-form">
+    <label for="date">Date:</label><br>
+    <input type="date" id="date"><br>
+    <label for="pending-days">Days Pending Before Payment:</label><br>
+    <input type="number" id="pending-days"><br>
+    <label for="amount">Amount:</label><br>
+    <input type="number" id="amount"><br>
+    <label for="reference">Reference:</label><br>
+    <input type="text" id="reference"><br>
+    <label for="type">Type:</label><br>
+    <select id="type">
+      <option value="input">Input</option>
+      <option value="output">Output</option>
+    </select><br>
+    <label for="name">Name:</label><br>
+    <input type="text" id="name"><br>
+    <label for="payment-option">Payment Option:</label><br>
+    <select id="payment-option">
+      <option value="cash">Cash</option>
+      <option value="check">Check</option>
+      <option value="credit-card">Credit Card</option>
+      <option value="online-transfer">Online Transfer</option>
+    </select><br><br>
+    <button type="submit">Submit</button>
+  </form> 
+  <div id="transaction-history">
+    <h2>Transaction History</h2>
+    <table>
+      <tr>
+        <th>Date</th>
+        <th>Days Pending Before Payment</th>
+        <th>Amount</th>
+        <th>Reference</th>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Payment Option</th>
+        <th>Actions</th>
+      </tr>
+    </table>
   </div>
+  <div id="balance">
+    <h2>Balance</h2>
+    <table>
+      <tr>
+        <th>Date</th>
+        <th>Income</th>
+        <th>Expenses</th>
+        <th>Balance</th>
+      </tr>
+    </table>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
-
-<script>
-
-const form = document.querySelector('form');
-const transactionList = document.querySelector('#transaction-list');
-
-// create an array to store transaction data
-const transactions = [];
-
-form.addEventListener('submit', event => {
-  // prevent the default form submission behavior
-  event.preventDefault();
-
-  // get the values from the form input fields
-  const date = document.querySelector('#date').value;
-  const daysPending = document.querySelector('#days-pending').value;
-  const amount = document.querySelector('#amount').value;
-  const reference = document.querySelector('#reference').value;
-  const type = document.querySelector('#type').value;
-  const name = document.querySelector('#name').value;
-  const paymentOption = document.querySelector('#payment-option').value;
-
-  // create a transaction object with the form data
-  const transaction = {
-    date,
-    daysPending,
-    amount,
-    reference,
-    type,
-    name,
-    paymentOption
-  };
-
-  // add the transaction object to the transactions array
-  transactions.push(transaction);
-
-  // clear the form input fields
-  form.reset();
-
-  // render the transaction list
-  renderTransactionList();
-});
-
-function renderTransactionList() {
-  // clear the transaction list
-  transactionList.innerHTML = '';
-
-  // loop through the transactions array
-  for (const transaction of transactions) {
-    // create a table row element
-    const row = document.createElement('tr');
-
-    // create a table cell for each piece of transaction data
-    const dateCell = document.createElement('td');
-    dateCell.textContent = transaction.date;
-    row.appendChild(dateCell);
-
-    const daysPendingCell = document.createElement('td');
-    daysPendingCell.textContent = transaction.daysPending;
-    row.appendChild(daysPendingCell);
-
-    const amountCell = document.createElement('td');
-    amountCell.textContent = transaction.amount;
-    row.appendChild(amountCell);
-
-    const referenceCell = document.createElement('td');
-    referenceCell.textContent = transaction.reference;
-    row.appendChild(referenceCell);
-
-    const typeCell = document.createElement('td');
-    typeCell.textContent = transaction.type;
-    row.appendChild(typeCell);
-
-    const nameCell = document.createElement('td');
-    nameCell.textContent = transaction.name;
-    row.appendChild(nameCell);
-
-    const paymentOptionCell = document.createElement('td');
-    paymentOptionCell.textContent = transaction.paymentOption;
-    row.appendChild(paymentOptionCell);
-
-    // append the row to the transaction list
-    transactionList.appendChild(row);
-  }
-}
-
-
-</script>
