@@ -4,208 +4,327 @@
   <title>Financial Tracker</title>
   
   <style>
-  body {
-  font-family: sans-serif;
+    
+  #financial-tracker-form {
+  font-family: Arial, sans-serif;
 }
 
-form {
-  display: flex;
-  flex-direction: column;
+label {
+  font-weight: bold;
 }
 
-input, select {
-  padding: 0.5em;
-  margin: 0.5em 0;
-}
-
-table {
-  border-collapse: collapse;
+input[type="text"], input[type="number"], select {
   width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical;
 }
 
-td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
+input[type="submit"] {
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+.container {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th, .table td {
+  border: 1px solid black;
   padding: 8px;
 }
 
-tr:nth-child(even) {
-  background-color: #dddddd;
+.table tr:nth-child(even) {
+  background-color: #f2f2f2;
 }
-
   
-  </style>
+ </style>
 </head>
 <body>
   
-  <button type="button" onclick="saveTransactions()">Save Transactions</button>
+  
+  <form id="financial-tracker-form">
+  <label for="date">Date:</label><br>
+  <input type="date" id="date"><br>
+  <label for="days-of-payment">Days of Payment:</label><br>
+  <input type="number" id="days-of-payment"><br>
+  <label for="amount">Amount:</label><br>
+  <input type="number" id="amount"><br>
+  <label for="reference-of-payment">Reference of Payment:</label><br>
+  <input type="text" id="reference-of-payment"><br>
+  <label for="type">Type:</label><br>
+  <input type="radio" id="type" name="type" value="input">Input<br>
+  <input type="radio" id="type" name="type" value="output">Output<br>
+  <label for="name">Name:</label><br>
+  <select id="name">
+    <option value="option1">Option 1</option>
+    <option value="option2">Option 2</option>
+    <option value="option3">Option 3</option>
+  </select>
+  <label for="options-of-payment">Options of Payment:</label><br>
+  <input type="checkbox" id="options-of-payment" name="options-of-payment" value="option1">Option 1<br>
+  <input type="checkbox" id="options-of-payment" name="options-of-payment" value="option2">Option 2<br>
+  <input type="checkbox" id="options-of-payment" name="options-of-payment" value="option3">Option 3<br>
+  <input type="submit" value="Submit">
+</form>
+  
+  
+<!-- Display the balance -->
+<button onclick="displayBalanceTable()">Display Balance</button>
 
-  <div id="app">
-    <h1>Financial Tracker</h1>
-    <form>
-      <label for="date">Date:</label><br>
-      <input type="date" id="date"><br>
-      <label for="days-pending">Days Pending Before Payment:</label><br>
-      <input type="number" id="days-pending"><br>
-      <label for="amount">Amount:</label><br>
-      <input type="number" id="amount"><br>
-      <label for="reference">Reference:</label><br>
-      <input type="text" id="reference"><br>
-      <label for="type">Type:</label><br>
-      <select id="type">
-        <option value="input">Input</option>
-        <option value="output">Output</option>
-      </select><br>
-      <label for="name">Name:</label><br>
-      <input type="text" id="name"><br>
-      <label for="payment-option">Payment Option:</label><br>
-      <select id="payment-option">
-        <option value="cash">Cash</option>
-        <option value="card">Card</option>
-        <option value="bank-transfer">Bank Transfer</option>
-      </select><br><br>
-      <button type="submit">Add Transaction</button>
-    </form> 
-    <div id="transaction-history">
-      <h2>Transaction History</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Days Pending</th>
-            <th>Amount</th>
-            <th>Reference</th>
-            <th>Type</th>
-            <th>Name</th>
-            <th>Payment Option</th>
-          </tr>
-        </thead>
-        <tbody id="transaction-list">
-        </tbody>
-      </table>
-    </div>
-  </div>
+<!-- Display the history of financial operations -->
+<button onclick="displayHistory()">Display History</button>
+  
 </body>
 </html>
 
 <script>
   
-  function saveTransactions() {
-  const transactionsString = JSON.stringify(transactions);
-  localStorage.setItem('transactions', transactionsString);
-}
-
-const form = document.querySelector('form');
-const transactionList = document.querySelector('#transaction-list');
-
-// create an array to store transaction data
-const transactions = [];
-
-form.addEventListener('submit', event => {
-  // prevent the default form submission behavior
-  event.preventDefault();
-
-  // get the values from the form input fields
-  const date = document.querySelector('#date').value;
-  const daysPending = document.querySelector('#days-pending').value;
-  const amount = document.querySelector('#amount').value;
-  const reference = document.querySelector('#reference').value;
-  const type = document.querySelector('#type').value;
-  const name = document.querySelector('#name').value;
-  const paymentOption = document.querySelector('#payment-option').value;
-
-  // create a transaction object with the form data
-  const transaction = {
-    date,
-    daysPending,
-    amount,
-    reference,
-    type,
-    name,
-    paymentOption
+// Save data to local storage
+function saveData() {
+  // Get form values
+  var date = document.getElementById("date").value;
+  var daysOfPayment = document.getElementById("days-of-payment").value;
+  var amount = document.getElementById("amount").value;
+  var referenceOfPayment = document.getElementById("reference-of-payment").value;
+  var type = document.querySelector('input[name="type"]:checked').value;
+  var name = document.getElementById("name").value;
+  var optionsOfPayment = [];
+  var optionsOfPaymentElements = document.querySelectorAll('input[name="options-of-payment"]:checked');
+  for (var i = 0; i < optionsOfPaymentElements.length; i++) {
+    optionsOfPayment.push(optionsOfPaymentElements[i].value);
+  }
+  
+  // Save form values to an object
+  var financialData = {
+    "date": date,
+    "daysOfPayment": daysOfPayment,
+    "amount": amount,
+    "referenceOfPayment": referenceOfPayment,
+    "type": type,
+    "name": name,
+    "optionsOfPayment": optionsOfPayment
   };
-
-  // add the transaction object to the transactions array
-  transactions.push(transaction);
-
-  // clear the form input fields
-  form.reset();
-
-  // render the transaction list
-  renderTransactionList();
-});
   
-  
-  
-function renderTransactionList() {
-  // clear the transaction list
-  transactionList.innerHTML = '';
-
-  // get the transactions from the local storage
-  const transactions = getTransactions();
-
-  // loop through the transactions and add a row to the table for each transaction
-  transactions.forEach(transaction => {
-    const row = document.createElement('tr');
-    row.innerHTML = `
-      <td>${transaction.date}</td>
-      <td>${transaction.daysPending}</td>
-      <td>${transaction.amount}</td>
-      <td>${transaction.reference}</td>
-      <td>${transaction.type}</td>
-      <td>${transaction.name}</td>
-      <td>${transaction.paymentOption}</td>
-    `;
-    transactionList.appendChild(row);
-  });
+  // Save the object to local storage
+  localStorage.setItem("financialData", JSON.stringify(financialData));
 }
+
+// Get data from local storage
+function getData() {
+  // Retrieve the object from local storage
+  var financialData = JSON.parse(localStorage.getItem("financialData"));
   
-  
-  
-
-function renderTransactionList() {
-  // clear the transaction list
-  transactionList.innerHTML = '';
-
-  // loop through the transactions array
-  for (const transaction of transactions) {
-    // create a table row element
-    const row = document.createElement('tr');
-
-    // create a table cell for each piece of transaction data
-    const dateCell = document.createElement('td');
-    dateCell.textContent = transaction.date;
-    row.appendChild(dateCell);
-
-    const daysPendingCell = document.createElement('td');
-    daysPendingCell.textContent = transaction.daysPending;
-    row.appendChild(daysPendingCell);
-
-    const amountCell = document.createElement('td');
-    amountCell.textContent = transaction.amount;
-    row.appendChild(amountCell);
-
-    const referenceCell = document.createElement('td');
-    referenceCell.textContent = transaction.reference;
-    row.appendChild(referenceCell);
-
-    const typeCell = document.createElement('td');
-    typeCell.textContent = transaction.type;
-    row.appendChild(typeCell);
-
-    const nameCell = document.createElement('td');
-    nameCell.textContent = transaction.name;
-    row.appendChild(nameCell);
-
-    const paymentOptionCell = document.createElement('td');
-    paymentOptionCell.textContent = transaction.paymentOption;
-    row.appendChild(paymentOptionCell);
-
-    // append the row to the transaction list
-    transactionList.appendChild(row);
+  // Use the object data to populate the form fields
+  document.getElementById("date").value = financialData.date;
+  document.getElementById("days-of-payment").value = financialData.daysOfPayment;
+  document.getElementById("amount").value = financialData.amount;
+  document.getElementById("reference-of-payment").value = financialData.referenceOfPayment;
+  document.querySelector('input[name="type"][value="' + financialData.type + '"]').checked = true;
+  document.getElementById("name").value = financialData.name;
+  for (var i = 0; i < financialData.optionsOfPayment.length; i++) {
+    document.querySelector('input[name="options-of-payment"][value="' + financialData.optionsOfPayment[i] + '"]').checked = true;
   }
 }
 
+// Check if local storage is supported
+if (localStorage) {
+  // Retrieve data from local storage on page load
+  getData();
+  
+  // Save data to local storage on form submission
+  document.getElementById("financial-tracker-form").addEventListener("submit", function(event) {
+    event.preventDefault();
+    saveData();
+  });
+}
+
+  
+  
+  function displayBalanceTable() {
+  // Get the financial data from local storage
+  var financialData = JSON.parse(localStorage.getItem("financialData"));
+  
+  // Calculate the balance
+  var balance = 0;
+  for (var i = 0; i < financialData.length; i++) {
+    if (financialData[i].type === "input") {
+      balance += financialData[i].amount;
+    } else {
+      balance -= financialData[i].amount;
+    }
+  }
+  
+  // Create a table element
+  var table = document.createElement("table");
+  table.classList.add("table");
+  
+  // Create a table row for the headings
+  var headingsRow = document.createElement("tr");
+  
+  // Create table headings
+  var dateHeading = document.createElement("th");
+  dateHeading.textContent = "Date";
+  headingsRow.appendChild(dateHeading);
+  
+  var incomeHeading = document.createElement("th");
+  incomeHeading.textContent = "Income";
+  headingsRow.appendChild(incomeHeading);
+  
+  var expensesHeading = document.createElement("th");
+  expensesHeading.textContent = "Expenses";
+  headingsRow.appendChild(expensesHeading);
+  
+  var balanceHeading = document.createElement("th");
+  balanceHeading.textContent = "Balance";
+  headingsRow.appendChild(balanceHeading);
+  
+  // Add the headings row to the table
+  table.appendChild(headingsRow);
+  
+  // Add a row for each day
+  for (var i = 0; i < financialData.length; i++) {
+    // Create a table row
+    var row = document.createElement("tr");
+    
+    // Create a table cell for the date
+    var dateCell = document.createElement("td");
+    dateCell.textContent = financialData[i].date;
+    row.appendChild(dateCell);
+    
+    // Create a table cell for the income or expenses
+    var amountCell = document.createElement("td");
+    if (financialData[i].type === "input") {
+      amountCell.textContent = financialData[i].amount;
+    } else {
+      amountCell.textContent = "-" + financialData[i].amount;
+    }
+    row.appendChild(amountCell);
+    
+    // Create a table cell for the balance
+    var balanceCell = document.createElement("td");
+    balanceCell.textContent = balance;
+    row.appendChild(balanceCell);
+    
+    // Add the row to the table
+    table.appendChild(row);
+  }
+  
+  // Add the table to the page
+  document.body.appendChild(table);
+}
+  
+  
+function displayHistory() {
+  // Get the financial data from local storage
+  var financialData = JSON.parse(localStorage.getItem("financialData"));
+  
+  // Create a table element
+  var table = document.createElement("table");
+  table.classList.add("table");
+  
+  // Create a table row for the headings
+  var headingsRow = document.createElement("tr");
+  
+  // Create table headings
+  var dateHeading = document.createElement("th");
+  dateHeading.textContent = "Date";
+  headingsRow.appendChild(dateHeading);
+  
+  var daysOfPaymentHeading = document.createElement("th");
+  daysOfPaymentHeading.textContent = "Days of Payment";
+  headingsRow.appendChild(daysOfPaymentHeading);
+  
+  var amountHeading = document.createElement("th");
+  amountHeading.textContent = "Amount";
+  headingsRow.appendChild(amountHeading);
+  
+  var referenceOfPaymentHeading = document.createElement("th");
+  referenceOfPaymentHeading.textContent = "Reference of Payment";
+  headingsRow.appendChild(referenceOfPaymentHeading);
+  
+  var typeHeading = document.createElement("th");
+  typeHeading.textContent = "Type";
+  headingsRow.appendChild(typeHeading);
+  
+  var nameHeading = document.createElement("th");
+  nameHeading.textContent = "Name";
+  headingsRow.appendChild(nameHeading);
+  
+  var optionsOfPaymentHeading = document.createElement("th");
+  optionsOfPaymentHeading.textContent = "Options of Payment";
+  headingsRow.appendChild(optionsOfPaymentHeading);
+  
+  // Add the headings row to the table
+  table.appendChild(headingsRow);
+  
+  // Add a row for each financial operation
+  for (var i = 0; i < financialData.length; i++) {
+    // Create a table row
+    var row = document.createElement("tr");
+    
+    // Create a table cell for the date
+    var dateCell = document.createElement("td");
+    dateCell.textContent = financialData[i].date;
+    row.appendChild(dateCell);
+    
+    // Create a table cell for the days of payment
+    var daysOfPaymentCell = document.createElement("td");
+    daysOfPaymentCell.textContent = financialData[i].daysOfPayment;
+    row.appendChild(daysOfPaymentCell);
+    
+    // Create a table cell for the amount
+    var amountCell = document.createElement("td");
+    amountCell.textContent = financialData[i].amount;
+    row.appendChild(amountCell);
+    
+    // Create a table cell for the reference of payment
+    var referenceOfPaymentCell = document.createElement("td");
+    referenceOfPaymentCell.textContent = financialData[i].referenceOfPayment;
+    row.appendChild(referenceOfPaymentCell);
+    
+// Create a table cell for the type
+    var typeCell = document.createElement("td");
+    typeCell.textContent = financialData[i].type;
+    row.appendChild(typeCell);
+    
+    // Create a table cell for the name
+    var nameCell = document.createElement("td");
+    nameCell.textContent = financialData[i].name;
+    row.appendChild(nameCell);
+    
+    // Create a table cell for the options of payment
+    var optionsOfPaymentCell = document.createElement("td");
+    optionsOfPaymentCell.textContent = financialData[i].optionsOfPayment.join(", ");
+    row.appendChild(optionsOfPaymentCell);
+    
+    // Add the row to the table
+    table.appendChild(row);
+  }
+  
+  // Add the table to the page
+  document.body.appendChild(table);
+}  
+  
 
 </script>
 
