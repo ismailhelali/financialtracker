@@ -172,3 +172,24 @@ function renderTransactionList() {
 
 
 </script>
+
+<script>
+  // Save the transactions to local storage
+function saveTransactions() {
+  localStorage.setItem('transactions', JSON.stringify(transactions));
+}
+
+// Load the transactions from local storage
+function loadTransactions() {
+  const savedTransactions = localStorage.getItem('transactions');
+  if (savedTransactions) {
+    transactions = JSON.parse(savedTransactions);
+    renderTransactionList();
+  }
+}
+
+// Add event listeners to save/load transactions when the page is closed/reloaded
+window.addEventListener('beforeunload', saveTransactions);
+window.addEventListener('load', loadTransactions);
+
+</script>
