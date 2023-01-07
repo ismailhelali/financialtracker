@@ -134,6 +134,34 @@ form.addEventListener('submit', event => {
   // render the transaction list
   renderTransactionList();
 });
+  
+  
+  
+function renderTransactionList() {
+  // clear the transaction list
+  transactionList.innerHTML = '';
+
+  // get the transactions from the local storage
+  const transactions = getTransactions();
+
+  // loop through the transactions and add a row to the table for each transaction
+  transactions.forEach(transaction => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${transaction.date}</td>
+      <td>${transaction.daysPending}</td>
+      <td>${transaction.amount}</td>
+      <td>${transaction.reference}</td>
+      <td>${transaction.type}</td>
+      <td>${transaction.name}</td>
+      <td>${transaction.paymentOption}</td>
+    `;
+    transactionList.appendChild(row);
+  });
+}
+  
+  
+  
 
 function renderTransactionList() {
   // clear the transaction list
