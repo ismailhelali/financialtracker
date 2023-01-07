@@ -37,6 +37,9 @@ tr:nth-child(even) {
   </style>
 </head>
 <body>
+  
+  <button type="button" onclick="saveTransactions()">Save Transactions</button>
+
   <div id="app">
     <h1>Financial Tracker</h1>
     <form>
@@ -86,6 +89,11 @@ tr:nth-child(even) {
 </html>
 
 <script>
+  
+  function saveTransactions() {
+  const transactionsString = JSON.stringify(transactions);
+  localStorage.setItem('transactions', transactionsString);
+}
 
 const form = document.querySelector('form');
 const transactionList = document.querySelector('#transaction-list');
@@ -173,23 +181,3 @@ function renderTransactionList() {
 
 </script>
 
-<script>
-  // Save the transactions to local storage
-function saveTransactions() {
-  localStorage.setItem('transactions', JSON.stringify(transactions));
-}
-
-// Load the transactions from local storage
-function loadTransactions() {
-  const savedTransactions = localStorage.getItem('transactions');
-  if (savedTransactions) {
-    transactions = JSON.parse(savedTransactions);
-    renderTransactionList();
-  }
-}
-
-// Add event listeners to save/load transactions when the page is closed/reloaded
-window.addEventListener('beforeunload', saveTransactions);
-window.addEventListener('load', loadTransactions);
-
-</script>
