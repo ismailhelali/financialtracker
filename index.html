@@ -1,62 +1,57 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Financial Profession Tracker</title>
-  <link rel="stylesheet" type="text/css" href="style.css">
+  <meta charset="utf-8">
+  <title>Ismail Helali Financial Profession Tracker</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Financial Profession Tracker</h1>
-  <form id="transaction-form">
-    <label for="date">Date:</label><br>
-    <input type="date" id="date"><br>
-    <label for="pending-days">Days Pending Before Payment:</label><br>
-    <input type="number" id="pending-days"><br>
-    <label for="amount">Amount:</label><br>
-    <input type="number" id="amount"><br>
-    <label for="reference">Reference:</label><br>
-    <input type="text" id="reference"><br>
-    <label for="type">Type:</label><br>
-    <select id="type">
-      <option value="input">Input</option>
-      <option value="output">Output</option>
-    </select><br>
-    <label for="name">Name:</label><br>
-    <input type="text" id="name"><br>
-    <label for="payment-option">Payment Option:</label><br>
-    <select id="payment-option">
-      <option value="cash">Cash</option>
-      <option value="check">Check</option>
-      <option value="credit-card">Credit Card</option>
-      <option value="online-transfer">Online Transfer</option>
-    </select><br><br>
-    <button type="submit">Submit</button>
-  </form> 
-  <div id="transaction-history">
-    <h2>Transaction History</h2>
-    <table>
-      <tr>
-        <th>Date</th>
-        <th>Days Pending Before Payment</th>
-        <th>Amount</th>
-        <th>Reference</th>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Payment Option</th>
-        <th>Actions</th>
-      </tr>
-    </table>
+  <div class="container">
+    <h1>Financial Profession Tracker</h1>
+    <form id="transaction-form">
+      <label for="date">Date</label><br>
+      <input type="date" id="date" name="date"><br>
+      <label for="pending-days">Pending Days</label><br>
+      <input type="number" id="pending-days" name="pendingDays"><br>
+      <label for="amount">Amount</label><br>
+      <input type="number" id="amount" name="amount"><br>
+      <label for="reference">Reference</label><br>
+      <input type="text" id="reference" name="reference"><br>
+      <label for="type">Type</label><br>
+      <input type="text" id="type" name="type"><br>
+      <label for="name">Name</label><br>
+      <input type="text" id="name" name="name"><br>
+      <label for="payment-option">Payment Option</label><br>
+      <input type="text" id="payment-option" name="paymentOption"><br><br>
+      <input type="submit" value="Submit">
+    </form> 
+    <div id="transaction-history">
+      <h2>Transaction History</h2>
+      <table>
+        <tr>
+          <th>Date</th>
+          <th>Pending Days</th>
+          <th>Amount</th>
+          <th>Reference</th>
+          <th>Type</th>
+          <th>Name</th>
+          <th>Payment Option</th>
+          <th>Action</th>
+        </tr>
+      </table>
+    </div>
+    <div id="balance">
+      <h2>Balance</h2>
+      <table>
+        <tr>
+          <th>Date</th>
+          <th>Income</th>
+          <th>Expenses</th>
+          <th>Balance</th>
+        </tr>
+      </table>
+    </div>
   </div>
-  <div id="balance">
-    <h2>Balance</h2>
-    <table>
-      <tr>
-        <th>Date</th>
-        <th>Income</th>
-        <th>Expenses</th>
-        <th>Balance</th>
-      </tr>
-    </table>
-  </div>
-  <script src="script.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
