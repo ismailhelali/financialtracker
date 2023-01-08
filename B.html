@@ -34,8 +34,12 @@
 </html>
 
 <script>
+// Retrieve the stored data from LocalStorage
+let transactions = localStorage.getItem('transactions');
 
-const transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+// Convert the stored data back into an array (assuming it was stored as a JSON string)
+transactions = JSON.parse(transactions);
+
 const tableBody = document.querySelector('#transaction-history tbody');
 transactions.forEach(transaction => {
   const row = document.createElement('tr');
