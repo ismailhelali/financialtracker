@@ -27,8 +27,9 @@
   <input type="date" id="start-date"><br>
   <label for="end-date">End Date:</label><br>
   <input type="date" id="end-date"><br>
-  <button type="submit">Show Balance</button>
+  <button type="submit" onclick="showBalance()">Show Balance</button>
 </form> 
+
 </body>
 
 </html>
@@ -62,31 +63,40 @@ transactions.forEach(transaction => {
 });
 
 
-let balance = 0;
-let input = 0;
-let output = 0;
-filteredTransactions.forEach(transaction => {
-if (transaction.type === 'credit') {
-input += transaction.amount;
-} else {
-output += transaction.amount;
+
+function showBalance() {
+  // Get the start and end dates from the form
+  const startDateField = document.querySelector('#start-date');
+  const endDateField = document.querySelector('#end-date');
+  const startDate = new Date(startDateField.value);
+  const endDate = new Date(endDateField.value);
+
+  // Filter the transactions based on the start and end dates
+  const filteredTransactions = transactions.filter(transaction => {
+    const transactionDate = new Date(transaction.date);
+    return transactionDate >= startDate && transactionDate <= endDate;
+  });
+
+  // Calculate the balance, input, and output
+  let balance = 0;
+  let input = 0;
+  let output = 0;
+  filteredTransactions.forEach(transaction => {
+    if (transaction.type === 'credit') {
+      input += transaction.amount;
+    } else {
+      output += transaction.amount;
+    }
+    balance += transaction.amount;
+  });
+
+  // Update the balance, input, and output fields with the calculated values
+  const balanceField = document.querySelector('#balance');
+  const inputField = document.querySelector('#input');
+  const outputField = document.querySelector('#output');
+  balanceField.textContent = balance;
+  inputField.textContent = input;
+  outputField.textContent = output;
 }
-balance += transaction.amount;
-// Create and append the row to the table
-// ...
-});
-
-
-balanceField.textContent = balance;
-inputField.textContent = input;
-outputField.textContent = output;
-
-const startDate = new Date(startDateField.value);
-const endDate = new Date(endDateField.value);
-const filteredTransactions = transactions.filter(transaction => {
-  const transactionDate = new Date(transaction.date);
-  return transactionDate >= startDate && transactionDate <= endDate;
-});
-
 </script>
 
