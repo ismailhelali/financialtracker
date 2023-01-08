@@ -34,12 +34,7 @@
 </html>
 
 <script>
-const startDate = new Date(startDateField.value);
-const endDate = new Date(endDateField.value);
-const filteredTransactions = transactions.filter(transaction => {
-  const transactionDate = new Date(transaction.date);
-  return transactionDate >= startDate && transactionDate <= endDate;
-});
+
 const transactions = JSON.parse(localStorage.getItem('transactions')) || [];
 const tableBody = document.querySelector('#transaction-history tbody');
 transactions.forEach(transaction => {
@@ -81,5 +76,13 @@ balance += transaction.amount;
 balanceField.textContent = balance;
 inputField.textContent = input;
 outputField.textContent = output;
+
+const startDate = new Date(startDateField.value);
+const endDate = new Date(endDateField.value);
+const filteredTransactions = transactions.filter(transaction => {
+  const transactionDate = new Date(transaction.date);
+  return transactionDate >= startDate && transactionDate <= endDate;
+});
+
 </script>
 
