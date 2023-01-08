@@ -89,11 +89,11 @@
     let output = 0;
     transactions.forEach(t => {
       if (t.type === 'credit') {
-        balance += t.amount;
-        input += t.amount;
+        balance += parseInt(t.amount);
+        input += parseInt(t.amount);
       } else {
-        balance -= t.amount;
-        output += t.amount;
+        balance -= parseInt(t.amount);
+        output += parseInt(t.amount);
       }
     });
     balanceField.textContent = balance;
@@ -131,11 +131,11 @@
   let output = 0;
   transactions.forEach(t => {
     if (t.type === 'credit') {
-      balance += t.amount;
-      input += t.amount;
+      balance += parseInt(t.amount);
+      input += parseInt(t.amount);
     } else {
-      balance -= t.amount;
-      output += t.amount;
+      balance -= parseInt(t.amount);
+      output += parseInt(t.amount);
     }
   });
   balanceField.textContent = balance;
