@@ -2,237 +2,145 @@
 <html>
 <head>
   <title>Financial Tracker</title>
-  
   <style>
-    
-  #financial-tracker-form {
-  font-family: Arial, sans-serif;
-}
-
-label {
-  font-weight: bold;
-}
-
-input[type="text"], input[type="number"], select {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-  margin-top: 6px;
-  margin-bottom: 16px;
-  resize: vertical;
-}
-
-input[type="submit"] {
-  background-color: #4CAF50;
-  color: white;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-input[type="submit"]:hover {
-  background-color: #45a049;
-}
-
-.container {
-  border-radius: 5px;
-  background-color: #f2f2f2;
-  padding: 20px;
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.table th, .table td {
-  border: 1px solid black;
-  padding: 8px;
-}
-
-.table tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
-  
- </style>
+    /* Add some styling for the UI */
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+  </style>
 </head>
 <body>
-  
-  
-<form id="financial-tracker-form">
-  <label for="date">Date:</label><br>
-  <input type="date" id="date"><br>
-  <label for="days-of-payment">Days of Payment:</label><br>
-  <input type="number" id="days-of-payment"><br>
-  <label for="amount">Amount:</label><br>
-  <input type="number" id="amount"><br>
-  <label for="reference-of-payment">Reference of Payment:</label><br>
-  <input type="text" id="reference-of-payment"><br>
-  <label for="type">Type:</label><br>
-  <input type="radio" id="type" name="type" value="input">Input<br>
-  <input type="radio" id="type" name="type" value="output">Output<br>
-  <label for="name">Name:</label><br>
-  <select id="name">
-    <option value="option1">Option 1</option>
-    <option value="option2">Option 2</option>
-    <option value="option3">Option 3</option>
-  </select>
-  <label for="options-of-payment">Options of Payment:</label><br>
-  <input type="checkbox" id="options-of-payment" name="options-of-payment" value="option1">Option 1<br>
-  <input type="checkbox" id="options-of-payment" name="options-of-payment" value="option2">Option 2<br>
-  <input type="checkbox" id="options-of-payment" name="options-of-payment" value="option3">Option 3<br>
-  <input type="submit" value="Submit">
-</form>
-
-
-
-<div id="balance"></div>
-  
-<script>
-  // Save data to local storage
-  function saveData(event) {
-    // Prevent the form from being submitted and causing the page to refresh
-    event.preventDefault();
-
-    // Get form values
-    var date = document.getElementById("date").value;
-    var daysOfPayment = document.getElementById("days-of-payment").value;
-    var amount = document.getElementById("amount").value;
-    var referenceOfPayment = document.getElementById("reference-of-payment").value;
-    var type = document.querySelector('input[name="type"]:checked').value;
-    var name = document.getElementById("name").value;
-    var optionsOfPayment = document.querySelectorAll('input[name="options-of-payment"]:checked');
-
-    // Create an object to hold the form values
-    var entry = {
-      date: date,
-      daysOfPayment: daysOfPayment,
-      amount: amount,
-      referenceOfPayment: referenceOfPayment,
-      type: type,
-      name: name,
-      optionsOfPayment: optionsOfPayment
-    };
-
-    // Save the entry object in local storage
-    localStorage.setItem(date, JSON.stringify(entry));
-  }
-
-  // Add the saveData function as a submit event handler for the form
-  var form = document.getElementById("financial-tracker-form");
-  form.addEventListener("submit", saveData);
-
-  // Display the current balance
-  function displayBalance() {
-    // Initialize the balance to 0
-    var balance = 0;
-
-    // Get all the stored data
-    for (var i = 0; i < localStorage.length; i++) {
-      var key = localStorage.key(i);
-      var entry = JSON.parse(localStorage.getItem(key));
-
-      // Add the amount to the balance if it is an input, or subtract it if it is an output
-      if (entry.type === "input") {
-        balance += entry.amount;
-      } else if (entry.type === "output") {
-        balance -= entry.amount;
+  <h1>Financial Tracker</h1>
+  <!-- Use a form to capture input from the user -->
+  <form id="transaction-form">
+    <label for="date">Date:</label><br>
+    <input type="date" id="date"><br>
+    <label for="amount">Amount:</label><br>
+    <input type="number" id="amount"><br>
+    <label for="reference">Reference:</label><br>
+    <input type="text" id="reference"><br>
+    <label for="type">Type of Payment:</label><br>
+    <select id="type">
+      <option value="debit">Debit</option>
+      <option value="credit">Credit</option>
+    </select><br>
+    <label for="name">Name:</label><br>
+    <input type="text" id="name"><br><br>
+    <button type="submit">Add Transaction</button>
+  </form> 
+  <!-- Display the current balance and input/output -->
+  <h2>Current Balance: <span id="balance">0</span></h2>
+  <h3>Input: <span id="input">0</span></h3>
+  <h3>Output: <span id="output">0</span></h3>
+  <!-- Display the transaction history -->
+  <h2>Transaction History</h2>
+  <table id="transaction-history">
+    <tr>
+      <th>Date</th>
+      <th>Amount</th>
+      <th>Reference</th>
+      <th>Type</th>
+      <th>Name</th>
+    </tr>
+  </table>
+  <script>
+    // Get a reference to the form and input fields
+    const form = document.querySelector('#transaction-form');
+    const dateField = document.querySelector('#date');
+    const amountField = document.querySelector('#amount');
+    const referenceField = document.querySelector('#reference');
+    const typeField = document.querySelector('#type');
+    const nameField = document.querySelector('#name');
+    // Get a reference to the elements that display the current balance and input/output
+    const balanceField = document.querySelector('#balance');
+    const inputField = document.querySelector('#input');
+    const outputField = document.querySelector('#output');
+    // Get a reference to the transaction history table
+    const historyTable = document.querySelector('#transaction-history');
+   
+  // Set up an event listener for the form submission
+  form.addEventListener('submit', e => {
+    // Prevent the default form submission behavior
+    e.preventDefault();
+    // Get the values from the form fields
+    const date = dateField.value;
+    const amount = amountField.value;
+    const reference = referenceField.value;
+    const type = typeField.value;
+    const name = nameField.value;
+    // Create a new object to represent the transaction
+    const transaction = { date, amount, reference, type, name };
+    // Store the transaction in local storage
+    let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+    transactions.push(transaction);
+    localStorage.setItem('transactions', JSON.stringify(transactions));
+    // Update the balance and input/output values
+    let balance = 0;
+    let input = 0;
+    let output = 0;
+    transactions.forEach(t => {
+      if (t.type === 'credit') {
+        balance += t.amount;
+        input += t.amount;
+      } else {
+        balance -= t.amount;
+        output += t.amount;
       }
+    });
+    balanceField.textContent = balance;
+    inputField.textContent = input;
+    outputField.textContent = output;
+    // Add the transaction to the history table
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${transaction.date}</td>
+      <td>${transaction.amount}</td>
+      <td>${transaction.reference}</td>
+      <td>${transaction.type}</td>
+      <td>${transaction.name}</td>
+    `;
+    historyTable.appendChild(row);
+    // Clear the form fields
+    form.reset();
+  });
+  // Load the transaction history from local storage and display it
+  const transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+  transactions.forEach(transaction => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${transaction.date}</td>
+      <td>${transaction.amount}</td>
+      <td>${transaction.reference}</td>
+      <td>${transaction.type}</td>
+      <td>${transaction.name}</td>
+    `;
+    historyTable.appendChild(row);
+  });
+  // Update the balance and input/output values
+  let balance = 0;
+  let input = 0;
+  let output = 0;
+  transactions.forEach(t => {
+    if (t.type === 'credit') {
+      balance += t.amount;
+      input += t.amount;
+    } else {
+      balance -= t.amount;
+      output += t.amount;
     }
-
-    // Display the balance
-    var balanceDiv = document.getElementById("balance");
-    balanceDiv.innerHTML = "Balance: $" + balance.toFixed(2);
-  }
-
-  // Display the history of financial operations
-  function displayHistory() {
-    // Create the table element
-    var table = document.createElement("table");
-    table.classList.add("table");
-
-    // Create the table head
-    var thead = document.createElement("thead");
-    var headRow = document.createElement("tr");
-    var dateHeading = document.createElement("th");
-    dateHeading.innerHTML = "Date";
-    headRow.appendChild(dateHeading);
-    var daysOfPaymentHeading = document.createElement("th");
-    daysOfPaymentHeading.innerHTML = "Days of Payment";
-    headRow.appendChild(daysOfPaymentHeading);
-    var amountHeading = document.createElement("th");
-    amountHeading.innerHTML = "Amount";
-    headRow.appendChild(amountHeading);
-    var referenceOfPaymentHeading = document.createElement("th");
-    referenceOfPaymentHeading.innerHTML = "Reference of Payment";
-    headRow.appendChild(referenceOfPaymentHeading);
-    var typeHeading = document.createElement("th");
-    typeHeading.innerHTML = "Type";
-    headRow.appendChild(typeHeading);
-    var nameHeading = document.createElement("th");
-    nameHeading.innerHTML = "Name";
-    headRow.appendChild(nameHeading);
-    var optionsOfPaymentHeading = document.createElement("th");
-    optionsOfPaymentHeading.innerHTML = "Options of Payment";
-    headRow.appendChild(optionsOfPaymentHeading);
-    thead.appendChild(headRow);
-    table.appendChild(thead);
-
-    // Create the table body
-    var tbody = document.createElement("tbody");
-
-    // Add a row for each entry in local storage
-    for (var i = 0; i < localStorage.length; i++) {
-      var key = localStorage.key(i);
-      var entry = JSON.parse(localStorage.getItem(key));
-
-      var row = document.createElement("tr");
-      var dateCell = document.createElement("td");
-      dateCell.innerHTML = entry.date;
-      row.appendChild(dateCell);
-      var daysOfPaymentCell = document.createElement("td");
-      daysOfPaymentCell.innerHTML = entry.daysOfPayment;
-      row.appendChild(daysOfPaymentCell);
-      var amountCell = document.createElement("td");
-      amountCell.innerHTML = "$" + entry.amount.toFixed(2);
-      row.appendChild(amountCell);
-      var referenceOfPaymentCell = document.createElement("td");
-      referenceOfPaymentCell.innerHTML = entry.referenceOfPayment;
-      row.appendChild(referenceOfPaymentCell);
-      var typeCell = document.createElement("td");
-      typeCell.innerHTML = entry.type;
-      row.appendChild(typeCell);
-      var nameCell = document.createElement("td");
-      nameCell.innerHTML = entry.name;
-      row.appendChild(nameCell);
-      var optionsOfPaymentCell = document.createElement("td");
-      optionsOfPaymentCell.innerHTML = entry.optionsOfPayment.map(function(option) { return option.value; }).join(", ");
-      row.appendChild(optionsOfPaymentCell);
-      tbody.appendChild(row);
-    }
-
-    table.appendChild(tbody);
-
-    // Add the table to the page
-    var historyDiv = document.getElementById("history");
-
-historyDiv.innerHTML = "";
-    historyDiv.appendChild(table);
-  }
+  });
+  balanceField.textContent = balance;
+  inputField.textContent = input;
+  outputField.textContent = output;
 </script>
-  
-  
-<!-- Display the balance -->
-<button onclick="displayBalance()">Display Balance</button>
-<div id="balance"></div>
-
-<!-- Display the history of financial operations -->
-<button onclick="displayHistory()">Display History</button>
-<div id="history"></div>
-  
 </body>
 </html>
-
