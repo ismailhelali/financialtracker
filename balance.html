@@ -143,49 +143,46 @@ form.addEventListener('submit', e => {
     </tr>
   `;
 
-  // Retrieve the transactions from local storage
-  let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+// Retrieve the transactions from local storage
+let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
 
-  // Group the transactions by date
-  const groupedTransactions = transactions.reduce((acc, curr) => {
-    const date = curr.date;
-    if (acc[date]) {
-      acc[date].push(curr);
-    } else {
-      acc[date] = [curr];
-    }
-    return acc;
-  }, {});
-
-  // Set the initial balance to 0
-  let balance = 0;
-
-  // Iterate over the grouped transactions and add rows to the table for each group of transactions
-  for (const date in groupedTransactions) {
-    // Calculate the input, output, and balance for the group of transactions
-    let input = 0;
-    let output = 0;
-    groupedTransactions[date].forEach(t => {
-      if (t.type === 'credit') {
-        balance += Number(t.amount);
-        input += Number(t.amount);
-      } else {
-        balance -= Number(t.amount);
-        output += Number(t.amount);
-      }
-    });
-    
-
-    // Add a row to the table for the group of transactions
-    historyTable.innerHTML += `
-      <tr>
-        <td class="date">${date}</td>
-        <td>${input}</td>
-        <td>${output}</td>
-        <td>${balance}</td>
-      </tr>
-    `;
+// Group the transactions by date
+const groupedTransactions = transactions.reduce((acc, curr) => {
+  const date = curr.date;
+  if (acc[date]) {
+    acc[date].push(curr);
+  } else {
+    acc[date] = [curr];
   }
-});
+  return acc;
+}, {});
+
+// Sort the grouped transactions by date
+const sortedGroupedTransactions = {};
+const dates = Object.keys(groupedTransactions);
+dates.sort((a, b) => new Date(a) - new Date(b));
+
+for (const date of dates) {
+  sortedGroupedTransactions[date] = groupedTransactions[date];
+}
+
+// Set the initial balance to 0
+let balance = 0;
+
+// Iterate over the sorted grouped transactions and add rows to the table for each group of transactions
+for (const date in sortedGroupedTransactions) {
+  // Calculate the input, output, and balance for the group of transactions
+  let input = 0;
+  let output = 0;
+  sortedGroupedTransactions[date].forEach(t => {
+    if (t.type === 'credit') {
+      balance += Number(t.amount);
+      input += Number(t.amount);
+    } else {
+      balance -= Number(t.amount);
+      output += Number(t.amount);
+    }
+  });
+}
 
 </script>
