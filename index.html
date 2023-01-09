@@ -64,21 +64,67 @@
   color: #ffa500;
 }
 
+.welcome-text {
+  font-family: 'Lato', sans-serif;
+  font-size: 18px;
+  color: #444444;
+  text-align: center;
+  line-height: 1.5;
+}
 
+.welcome-text strong {
+  font-weight: 600;
+}
+
+.welcome-text em {
+  font-style: italic;
+}
+
+.features-list {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
+  color: #666666;
+  text-align: left;
+  list-style: square;
+  margin: 20px 0;
+  padding: 0;
+}
+
+.features-list li {
+  margin: 10px 0;
+}
   </style>
 </head>
 <body>
 
 <!-- Navigation Bar -->
 <div class="navbar">
-  <a href="/">Home</a>
-  <a href="/data-input">Data Entry</a>
-  <a href="/balance">Daily Balance</a>
-  <a href="/about">About</a>
-  <a href="/dashboard">Dashboard</a>
-  <a href="/echeance">Echeance Calculator</a>
+  <a href="financieltracker/">Home</a>
+  <a href="financialtracker/data-input">Data Entry</a>
+  <a href="financialtracker/balance">Daily Balance</a>
+  <a href="financialtracker/about">About</a>
+  <a href="financialtracker/dashboard">Dashboard</a>
+  <a href="financialtracker/echeance">Echeance Calculator</a>
   <a href="/instagram">Instagram</a>
 </div>
+
+
+<div class="welcome-text">
+  Bienvenue sur notre site de suivi financier ! 
+  <strong>Nous vous offrons la possibilité de suivre toutes vos transactions financières, du présent jusqu'à une date future de votre choix</strong>. 
+  Grâce à notre <em>calculateur de solde prévisionnel jour par jour</em>, vous pouvez prévenir les problèmes financiers à venir et anticiper les besoins financiers avant que votre banque ne vous contacte. 
+  Notre <strong>tableau de bord sophistiqué</strong> vous offre une vue d'ensemble claire de votre situation financière. 
+  Et le plus important : vos informations ne sont pas visibles par nos soins, car elles sont stockées sur votre appareil local et peuvent accueillir un nombre illimité de données en fonction de la capacité de votre appareil (jusqu'à 10000 transactions pour chaque 1 Mo). 
+  Le code de notre application est <em>open source</em>, vous pouvez donc y contribuer ou l'utiliser à des fins personnelles.
+</div>
+
+<ul class="features-list">
+  <li>Suivi de toutes vos transactions financières</li>
+  <li>Calculateur de solde prévisionnel jour par jour</li>
+  <li>Tableau de bord sophistiqué</li>
+  <li>Stockage sécurisé des informations sur votre appareil</li>
+  <li>Code open source</li>
+</ul>
 
 <!-- Footer -->
 <div class="footer">
