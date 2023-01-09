@@ -129,34 +129,14 @@ form.addEventListener('submit', e => {
   historyTable.innerHTML = '';
 
   // Add the table headers
-historyTable.innerHTML = `
-  <tr>
-    <th>Date</th>
-    <th>Input</th>
-    <th>Output</th>
-    <th>Balance</th>
-  </tr>
-`;
-
-// Loop through the transactions and add a new row for each one
-transactions.forEach(transaction => {
-  // Convert the date to a more readable format
-  const date = new Date(transaction.date);
-  const formattedDate = date.toLocaleDateString('fr-FR', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric'
-  });
-  // Add a new row to the table with the transaction data
-  historyTable.innerHTML += `
+  historyTable.innerHTML = `
     <tr>
-      <td>${formattedDate}</td>
-      <td class="amount">${transaction.input}</td>
-      <td class="amount">${transaction.output}</td>
-      <td class="amount">${transaction.balance}</td>
+      <th>Date</th>
+      <th>Input</th>
+      <th>Output</th>
+      <th>Balance</th>
     </tr>
   `;
-});
 
   // Retrieve the transactions from local storage
   let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
@@ -189,11 +169,21 @@ transactions.forEach(transaction => {
         output += Number(t.amount);
       }
     });
+    
+ // Loop through the transactions and add a new row for each one
+transactions.forEach(transaction => {
+  // Convert the date to a more readable format
+  const date = new Date(transaction.date);
+  const formattedDate = date.toLocaleDateString('fr-FR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  });
 
     // Add a row to the table for the group of transactions
     historyTable.innerHTML += `
       <tr>
-        <td>${date}</td>
+        <td>${formattedDate}</td>
         <td>${input}</td>
         <td>${output}</td>
         <td>${balance}</td>
@@ -203,4 +193,3 @@ transactions.forEach(transaction => {
 });
 
 </script>
-
