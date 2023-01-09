@@ -1,0 +1,125 @@
+Copy code
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Knapsack Problem</title>
+  <style>
+    /* Add some styling for the form and table */
+  </style>
+</head>
+<body>
+  <!-- Add a form for the user to input items and the knapsack capacity -->
+  <form id="knapsackForm">
+    <label for="capacity">Knapsack Capacity:</label><br>
+    <input type="number" id="capacity" min="1"><br>
+    <br>
+    <label for="items">Items:</label><br>
+    <table id="items">
+      <!-- Add a template row for the user to add new items -->
+      <tr>
+        <td><input type="text" placeholder="Item Name"></td>
+        <td><input type="number" placeholder="Value" min="1"></td>
+        <td><input type="number" placeholder="Weight" min="1"></td>
+      </tr>
+    </table>
+    <br>
+    <button type="button" onclick="addItem()">Add Item</button>
+    <button type="submit">Solve</button>
+  </form>
+
+  <!-- Add a place to display the solution -->
+  <h2>Solution</h2>
+  <div id="solution"></div>
+
+  <script>
+    // Add a function to add new rows to the items table
+    function addItem() {
+      // Get the table and create a new row
+      const table = document.getElementById('items');
+      const row = table.insertRow(-1);
+
+      // Add cells to the row
+      const nameCell = row.insertCell(0);
+      const valueCell = row.insertCell(1);
+      const weightCell = row.insertCell(2);
+
+      // Add inputs to the cells
+      nameCell.innerHTML = `<input type="text" placeholder="Item Name">`;
+      valueCell.innerHTML = `<input type="number" placeholder="Value" min="1">`;
+      weightCell.innerHTML = `<input type="number" placeholder="Weight" min="1">`;
+    }
+
+    // Add a function to solve the knapsack problem when the form is submitted
+    document.getElementById('knapsackForm').onsubmit = function(e) {
+      // Prevent the form from submitting
+      e.preventDefault();
+
+      // Get the capacity from the form
+      const capacity = document.getElementById('capacity').value;
+
+      // Get the items from the form
+      const items = [];
+      const rows = document.getElementById('items').rows;
+      for (let i = 0; i < rows.length; i++) {
+        const cells = rows[i].cells;
+        const name = cells[0].children[0].value;
+        const value = cells[1].children[0].value;
+        const weight = cells[2].children[0].value;
+        if (name && value && weight) {
+          items.push({ name, value, weight });
+        }
+      }
+
+      // Solve the knapsack problem
+      const solution = knapsack(items, capacity);
+
+      // Display the solution
+      const solutionDiv = document.getElementById('solution');
+      solutionDiv.innerHTML = '';
+      for (const item of solution.items) {
+        solutionDiv.innerHTML += `${item.name} (${item.value}, ${item.weight})<br>`;
+      }
+      solutionDiv.innerHTML += `<br>Total Value: ${solution.totalValue}<br>Total Weight: ${solution.totalWeight}`;
+    }
+
+    // A function to solve the knapsack problem
+    function knapsack(items, capacity) {
+      // Create a 2D array to store the maximum value at each item and capacity
+      const dp = [];
+      for (let i = 0; i <= items.length; i++) {
+        dp.push([]);
+        for (let j = 0; j <= capacity; j++) {
+          if (i === 0 || j === 0) {
+            dp[i][j] = 0;
+          } else {
+            dp[i][j] = dp[i - 1][j];
+            const item = items[i - 1];
+            if (item.weight <= j) {
+              dp[i][j] = Math.max(dp[i][j], dp[i - 1][j - item.weight] + item.value);
+            }
+          }
+        }
+      }
+
+      // Get the items that make up the maximum value
+      const selected = [];
+      let i = items.length;
+      let j = capacity;
+      while (i > 0 && j > 0) {
+        if (dp[i][j] !== dp[i - 1][j]) {
+          selected.push(items[i - 1]);
+          j -= items[i - 1].weight;
+        }
+        i--;
+      }
+
+      // Return the items and the maximum value
+      return {
+        items: selected.reverse(),
+        totalValue: dp[items.length][capacity],
+        totalWeight: selected.reduce((total, item) => total + item.weight, 0)
+      };
+    }
+  </script>
+</body>
+</html>
