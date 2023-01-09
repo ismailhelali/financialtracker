@@ -162,11 +162,11 @@ form.addEventListener('submit', e => {
     let output = 0;
     groupedTransactions[date].forEach(t => {
       if (t.type === 'credit') {
-        balance += t.amount;
-        input += t.amount;
+        balance += Number(t.amount);
+        input += Number(t.amount);
       } else {
-        balance -= t.amount;
-        output += t.amount;
+        balance -= Number(t.amount);
+        output += Number(t.amount);
       }
     });
 
