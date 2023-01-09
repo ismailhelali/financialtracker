@@ -143,8 +143,14 @@ form.addEventListener('submit', e => {
     </tr>
   `;
 
+
+
   // Retrieve the transactions from local storage
   let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+
+  // Sort the data 
+  transactions.sort((a, b) => new Date(a.date) - new Date(b.date));
+
 
   // Group the transactions by date
   const groupedTransactions = transactions.reduce((acc, curr) => {
