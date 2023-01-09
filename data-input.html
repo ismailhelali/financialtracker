@@ -3,6 +3,67 @@
 <head>
   <title>Financial Tracker</title>
   <style>
+
+/* Navigation Bar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #333;
+  color: #fff;
+  height: 50px;
+  padding: 0 20px;
+}
+
+.navbar a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 18px;
+  margin: 0 20px;
+  transition: all 0.3s ease;
+}
+
+.navbar a:hover {
+  color: #ddd;
+}
+
+.navbar a.active {
+  color: #ffa500;
+  font-weight: bold;
+}
+
+.navbar .logo {
+  font-size: 22px;
+  font-weight: bold;
+  margin: 0;
+}
+
+/* Footer */
+.footer {
+  background-color: #333;
+  color: #fff;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.footer a {
+  color: #ddd;
+  text-decoration: none;
+  margin: 0 10px;
+  transition: all 0.3s ease;
+}
+
+.footer a:hover {
+  color: #ffa500;
+}
+
     /* Add some styling for the UI */
     table {
       border-collapse: collapse;
@@ -19,6 +80,25 @@
   </style>
 </head>
 <body>
+
+<!-- Navigation Bar -->
+<div class="navbar">
+  <a href="#">Home</a>
+  <a href="#data-input">Data Entry</a>
+  <a href="#balance">Daily Balance</a>
+  <a href="#about">About</a>
+  <a href="#dashboard">Dashboard</a>
+  <a href="#echeance">Echeance Calculator</a>
+  <a href="#instagram">Instagram</a>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <p>Open source web app created by ChatGPT. Original idea by Ismail Helali.</p>
+</div>
+
+
+
   <h1>Financial Tracker</h1>
   <!-- Use a form to capture input from the user -->
   <form id="transaction-form">
