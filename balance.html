@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Financial days Tracker</title>
+  <style>
+ table {
+  border-collapse: collapse;
+  width: 100%;
+}
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+  </style>
+</head>
+<body>
+  <h1>Solde journalier Tracker</h1>
+ <!-- Use a form to capture input from the user -->
+<form id="date-filter-form">
+  <label for="start-date">Start Date:</label><br>
+  <input type="date" id="start-date"><br>
+  <label for="end-date">End Date:</label><br>
+  <input type="date" id="end-date"><br><br>
+  <button type="submit">Filter Transactions</button>
+</form> 
+
+<!-- Display the transaction history -->
+<h2>Transaction History</h2>
+<table id="transaction-history">
+  <tr>
+    <th>Date</th>
+    <th>Input</th>
+    <th>Output</th>
+    <th>Balance</th>
+  </tr>
+</table>
+
+
+</body>
+
+</html>
+
+<script>
+// Get a reference to the form and input fields
+const form = document.querySelector('#date-filter-form');
+const startDateField = document.querySelector('#start-date');
+const endDateField = document.querySelector('#end-date');
+// Get a reference to the transaction history table
+const historyTable = document.querySelector('#transaction-history');
+
+// Set up an event listener for the form submission
+form.addEventListener('submit', e => {
+  // Prevent the default form submission behavior
+  e.preventDefault();
+
+  // Get the start and end dates from the form fields
+  const startDate = startDateField.value;
+  const endDate = endDateField.value;
+
+  // Clear the table
+  historyTable.innerHTML = '';
+
+  // Add the table headers
+  historyTable.innerHTML = `
+    <tr>
+      <th>Date</th>
+      <th>Input</th>
+      <th>Output</th>
+      <th>Balance</th>
+    </tr>
+  `;
+
+  // Retrieve the transactions from local storage
+  let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+
+  // Group the transactions by date
+  const groupedTransactions = transactions.reduce((acc, curr) => {
+    const date = curr.date.split('-')[2];
+    if (acc[date]) {
+      acc[date].push(curr);
+    } else {
+      acc[date] = [curr];
+    }
+    return acc;
+  }, {});
+
+  // Set the initial balance to 0
+  let balance = 0;
+
+  // Iterate over the grouped transactions and add rows to the table for each group of transactions
+  for (const date in groupedTransactions) {
+    // Calculate the input, output, and balance for the group of transactions
+    let input = 0;
+    let output = 0;
+    groupedTransactions[date].forEach(t => {
+      if (t.type === 'credit') {
+        balance += t.amount;
+        input += t.amount;
+      } else {
+        balance -= t.amount;
+        output += t.amount;
+      }
+    });
+
+    // Add a row to the table for the group of transactions
+    historyTable.innerHTML += `
+      <tr>
+        <td>${date}</td>
+        <td>${input}</td>
+        <td>${output}</td>
+        <td>${balance}</td>
+      </tr>
+    `;
+  }
+});
+
+</script>
+
