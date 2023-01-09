@@ -126,7 +126,6 @@ form.addEventListener('submit', e => {
   // Prevent the default form submission behavior
   e.preventDefault();
 
-  
   // Get the start and end dates from the form fields
   const startDate = startDateField.value;
   const endDate = endDateField.value;
@@ -143,6 +142,7 @@ form.addEventListener('submit', e => {
       <th>Balance</th>
     </tr>
   `;
+
   // Retrieve the transactions from local storage
   let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
 
@@ -174,5 +174,18 @@ form.addEventListener('submit', e => {
         output += Number(t.amount);
       }
     });
+    
+
+    // Add a row to the table for the group of transactions
+    historyTable.innerHTML += `
+      <tr>
+        <td class="date">${date}</td>
+        <td>${input}</td>
+        <td>${output}</td>
+        <td>${balance}</td>
+      </tr>
+    `;
+  }
+});
 
 </script>
