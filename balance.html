@@ -3,6 +3,11 @@
 <head>
   <title>Financial days Tracker</title>
   <style>
+    
+td.date {
+  text-align: left;
+  white-space: nowrap;
+}    
 form {
   display: flex;
   flex-direction: column;
@@ -170,20 +175,12 @@ form.addEventListener('submit', e => {
       }
     });
     
- // Loop through the transactions and add a new row for each one
-transactions.forEach(transaction => {
-  // Convert the date to a more readable format
-  const date = new Date(transaction.date);
-  const formattedDate = date.toLocaleDateString('fr-FR', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric'
-  });
+    
 
     // Add a row to the table for the group of transactions
     historyTable.innerHTML += `
       <tr>
-        <td>${formattedDate}</td>
+        <td class="date">${date}</td>
         <td>${input}</td>
         <td>${output}</td>
         <td>${balance}</td>
