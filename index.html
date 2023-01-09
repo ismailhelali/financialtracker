@@ -2,6 +2,9 @@
 <html>
 <head>
   <title>Financial Tracker</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+
   <style>
 
 /* Navigation Bar */
@@ -63,36 +66,53 @@
 .footer a:hover {
   color: #ffa500;
 }
-
-.welcome-text {
+.welcome-message {
   font-family: 'Lato', sans-serif;
+  font-size: 24px;
+  color: #333333;
+  text-align: center;
+  margin: 30px 0;
+}
+
+.features {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin: 30px 0;
+}
+
+.feature {
+  width: 30%;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.feature-icon {
+  font-size: 48px;
+  color: #00b8d4;
+}
+
+.feature-title {
+  font-family: 'Open Sans', sans-serif;
   font-size: 18px;
   color: #444444;
-  text-align: center;
-  line-height: 1.5;
-}
-
-.welcome-text strong {
-  font-weight: 600;
-}
-
-.welcome-text em {
-  font-style: italic;
-}
-
-.features-list {
-  font-family: 'Open Sans', sans-serif;
-  font-size: 16px;
-  color: #666666;
-  text-align: left;
-  list-style: square;
-  margin: 20px 0;
-  padding: 0;
-}
-
-.features-list li {
   margin: 10px 0;
 }
+
+.feature-description {
+  font-size: 14px;
+  color: #666666;
+}
+
+.feature {
+  /* ... */
+  transition: all 0.5s ease-in-out;
+}
+
+.feature:hover {
+  transform: scale(1.1);
+}
+
   </style>
 </head>
 <body>
@@ -108,23 +128,37 @@
   <a href="/instagram">Instagram</a>
 </div>
 
+<div class="welcome-message">Bienvenue sur notre site de suivi financier !</div>
 
-<div class="welcome-text">
-  Bienvenue sur notre site de suivi financier ! 
-  <strong>Nous vous offrons la possibilité de suivre toutes vos transactions financières, du présent jusqu'à une date future de votre choix</strong>. 
-  Grâce à notre <em>calculateur de solde prévisionnel jour par jour</em>, vous pouvez prévenir les problèmes financiers à venir et anticiper les besoins financiers avant que votre banque ne vous contacte. 
-  Notre <strong>tableau de bord sophistiqué</strong> vous offre une vue d'ensemble claire de votre situation financière. 
-  Et le plus important : vos informations ne sont pas visibles par nos soins, car elles sont stockées sur votre appareil local et peuvent accueillir un nombre illimité de données en fonction de la capacité de votre appareil (jusqu'à 10000 transactions pour chaque 1 Mo). 
-  Le code de notre application est <em>open source</em>, vous pouvez donc y contribuer ou l'utiliser à des fins personnelles.
+<div class="features">
+  <div class="feature">
+    <i class="feature-icon fas fa-calendar-alt"></i>
+    <h3 class="feature-title">Suivi de transactions</h3>
+    <p class="feature-description">Suivez toutes vos transactions financières, du présent jusqu'à une date future de votre choix.</p>
+  </div>
+  <div class="feature">
+    <i class="feature-icon fas fa-calculator"></i>
+    <h3 class="feature-title">Calculateur de solde</h3>
+    <p class="feature-description">Prévenez les problèmes financiers à venir et anticipez les besoins financiers grâce à notre calculateur de solde prévisionnel jour par jour.</p>
+  </div>
+  <div class="feature">
+    <i class="feature-icon fas fa-tachometer-alt"></i>
+    <h3 class="feature-title">Tableau de bord</h3>
+    <p class="feature-description">Obtenez une vue d'ensemble claire de votre situation financière grâce à notre tableau de bord sophistiqué.</p>
+  </div>
+  <div class="feature">
+    <i class="feature-icon fas fa-lock"></i>
+    <h3 class="feature-title">Sécurité</h3>
+    <p class="feature-description">Vos informations sont stockées de manière sécurisée sur votre appareil et ne sont pas visibles par nos soins.</p>
+  </div>
+  
+<div class="feature">
+  <i class="feature-icon fas fa-code"></i>
+  <h3 class="feature-title">Code open source</h3>
+  <p class="feature-description">Notre application est open source, vous pouvez donc y contribuer ou l'utiliser à des fins personnelles.</p>
+</div>
 </div>
 
-<ul class="features-list">
-  <li>Suivi de toutes vos transactions financières</li>
-  <li>Calculateur de solde prévisionnel jour par jour</li>
-  <li>Tableau de bord sophistiqué</li>
-  <li>Stockage sécurisé des informations sur votre appareil</li>
-  <li>Code open source</li>
-</ul>
 
 <!-- Footer -->
 <div class="footer">
