@@ -1,197 +1,200 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
- <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
-  <title>Financial Tracker Dashboard</title>
+  <title>Financial days Tracker</title>
   <style>
-   
-#dashboard {
+    
+td.date {
+  text-align: left;
+  white-space: nowrap;
+}    
+form {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 300px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fafafa;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
 }
-#filters {
+
+form label {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+form input, form select {
   width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
+  height: 32px;
+  padding: 0 8px;
+  margin-bottom: 16px;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+  font-size: 14px;
 }
-#kpis {
+
+form button[type="submit"] {
   width: 100%;
-  display: flex;
-  justify-content: space-evenly;
+  height: 32px;
+  background-color: #0000ff;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
 }
-#kpis div {
-  width: 20%;
-  text-align: center;
+
+form button[type="submit"]:hover {
+  background-color: #0000cc;
 }
-#charts {
+
+table {
   width: 100%;
-  display: flex;
-  justify-content: space-evenly;
+  margin: 20px 0;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  color: #333333;
 }
-#charts canvas {
-  width: 48%;
+
+th {
+  background-color: #f0f0f0;
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+  font-size: 14px;
+  font-weight: bold;
 }
+
+td {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+  font-size: 14px;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.amount {
+  text-align: right;
+}
+
   </style>
 </head>
 <body>
-<div id="dashboard">
-  <div id="filters">
-    <label for="start-date">Start Date:</label>
-    <input type="date" id="start-date">
-    <label for="end-date">End Date:</label>
-    <input type="date" id="end-date">
-    <button id="filter-button">Filter</button>
-  </div>
-  <div id="kpis">
-    <div id="current-balance"></div>
-    <div id="income"></div>
-    <div id="expenses"></div>
-    <div id="net-income"></div>
-  </div>
-  <div id="charts">
-    <canvas id="balance-chart"></canvas>
-    <canvas id="spending-chart"></canvas>
-  </div>
-</div>
+  <h1>Solde journalier Tracker</h1>
+ <!-- Use a form to capture input from the user -->
+<form id="date-filter-form">
+  <label for="start-date">Start Date:</label><br>
+  <input type="date" id="start-date"><br>
+  <label for="end-date">End Date:</label><br>
+  <input type="date" id="end-date"><br><br>
+  <button type="submit">Filter Transactions</button>
+</form> 
+
+<!-- Display the transaction history -->
+<h2>Transaction History</h2>
+<table id="transaction-history">
+  <tr>
+    <th>Date</th>
+    <th>Input</th>
+    <th>Output</th>
+    <th>Balance</th>
+  </tr>
+</table>
+
+
+</body>
+
+</html>
 
 <script>
+// Get a reference to the form and input fields
+const form = document.querySelector('#date-filter-form');
+const startDateField = document.querySelector('#start-date');
+const endDateField = document.querySelector('#end-date');
+// Get a reference to the transaction history table
+const historyTable = document.querySelector('#transaction-history');
+
+// Set up an event listener for the form submission
+form.addEventListener('submit', e => {
+  // Prevent the default form submission behavior
+  e.preventDefault();
+
+  // Get the start and end dates from the form fields
+  const startDate = startDateField.value;
+  const endDate = endDateField.value;
+
+  // Clear the table
+  historyTable.innerHTML = '';
+
+  // Add the table headers
+  historyTable.innerHTML = `
+    <tr>
+      <th>Date</th>
+      <th>Input</th>
+      <th>Output</th>
+      <th>Balance</th>
+    </tr>
+  `;
+
+
+
   // Retrieve the transactions from local storage
   let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
 
   // Sort the data 
   transactions.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+
+  // Group the transactions by date
+ groupedTransactions = transactions.reduce((acc, curr) => {
+    const dateArray = curr.date.split("-");
+    const newDate = [dateArray[1], dateArray[2]].join("-");
+    if (acc[newDate]) {
+      acc[newDate].push(curr);
+    } else {
+      acc[newDate] = [curr];
+    }
+    return acc;
+  }, {});.
  
 
 
-// Filter transactions based on start and end date
-let startDate = new Date();
-let endDate = new Date();
-document.getElementById("start-date").valueAsDate = startDate;
-document.getElementById("end-date").valueAsDate = endDate;
-document.getElementById("filter-button").addEventListener("click", function() {
-  startDate = new Date(document.getElementById("start-date").value);
-  endDate = new Date(document.getElementById("end-date").value);
-  filterAndUpdate();
+  // Set the initial balance to 0
+  let balance = 0;
+
+  // Iterate over the grouped transactions and add rows to the table for each group of transactions
+  for (const date in groupedTransactions) {
+    // Calculate the input, output, and balance for the group of transactions
+    let input = 0;
+    let output = 0;
+    groupedTransactions[newDate].forEach(t => {
+      if (t.type === 'credit') {
+        balance += Number(t.amount);
+        input += Number(t.amount);
+      } else {
+        balance -= Number(t.amount);
+        output += Number(t.amount);
+      }
+    });
+    
+
+    // Add a row to the table for the group of transactions
+    historyTable.innerHTML += `
+      <tr>
+        <td class="date">${newDate}</td>
+        <td>${input}</td>
+        <td>${output}</td>
+        <td>${balance}</td>
+      </tr>
+    `;
+  }
 });
 
-function filterAndUpdate() {
-  // Filter transactions based on start and end date
-  transactions = transactions.filter(transaction => {
-    let date = new Date(transaction.date);
-    return date >= startDate && date <= endDate;
-  });
-
-  // Group transactions by category
-  let categories = {};
-  transactions.forEach(transaction => {
-    let category = transaction.category || "Other";
-    if (!categories[category]) {
-      categories[category] = 0;
-    }
-    categories[category] += transaction.amount;
-  });
-
-  // Calculate current balance, income, expenses, and net income
-  let currentBalance = 0;
-  let income = 0;
-  let expenses = 0;
-  transactions.forEach(transaction => {
-    currentBalance += transaction.amount;
-    if (transaction.amount > 0) {
-      income += transaction.amount;
-    } else {
-      expenses -= transaction.amount;
-    }
-  });
-  let netIncome = income - expenses;
-
-  // Display KPI values
-  document.getElementById("current-balance").innerHTML = `Current Balance: ${currentBalance}`;
-  document.getElementById("income").innerHTML = `Income: ${income}`;
-  document.getElementById("expenses").innerHTML = `Expenses: ${expenses}`;
-  document.getElementById("net-income").innerHTML = `Net Income: ${netIncome}`;
-
-  // Create balance chart
-  let balanceData = transactions.map(transaction => {
-    return { x: new Date(transaction.date), y: currentBalance };
-  });
-  let balanceChart = new Chart(document.getElementById("balance-chart"), {
-    type: "line",
-    data: {
-      datasets: [{
-        label: "Current Balance",
-        data: balanceData,
-        backgroundColor: "rgba(0, 0, 255, 0.2)",
-        borderColor: "rgba(0, 0, 255, 1)",
-        borderWidth: 1
-      }]
-    },
-    options: {
-      scales: {
-        x: {
-          type: "time",
-          distribution: "series",
-          time: {
-            unit: "month"
-          }
-        },
-        y: {
-          beginAtZero: true
-        }
-      }
-    }
-  });
-
-  // Create spending chart
-  let spendingData = Object.keys(categories).map(category => {
-    return { label: category, value: categories[category] };
-  });
-  let spendingChart = new Chart(document.getElementById("spending-chart"), {
-    type: "pie",
-    data: {
-      datasets: [{
-        data: spendingData,
-        backgroundColor: [
-          "rgba(255, 0, 0, 0.2)",
-          "rgba(0, 255, 0, 0.2)",
-          "rgba(0, 0, 255, 0.2)",
-          "rgba(255, 255, 0, 0.2)",
-          "rgba(0, 255, 255, 0.2)",
-          "rgba(255, 0, 255, 0.2)"
-        ],
-        borderColor: [
-          "rgba(255, 0, 0, 1)",
-          "rgba(0, 255, 0, 1)",
-          "rgba(0, 0, 255, 1)",
-          "rgba(255, 255, 0, 1)",
-          "rgba(0, 255, 255, 1)",
-          "rgba(255, 0, 255, 1)"
-        ],
-        borderWidth: 1
-      }],
-      labels: spendingData.map(data => data.label)
-    },
-    options: {
-      responsive: true,
-      legend: {
-        position: 'top',
-      },
-      title: {
-        display: true,
-        text: 'Spending by Category'
-      },
-      animation: {
-        animateScale: true,
-        animateRotate: true
-      }
-    }
-  });
-}
-
-// Initial load
-filterAndUpdate();
 </script>
-
-</body>
-</html>
