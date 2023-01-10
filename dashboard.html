@@ -3,217 +3,188 @@
 <head>
   <title>Financial Tracker Dashboard</title>
   <style>
-    /* Add some styling for the dashboard */
-    .dashboard {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: flex-start;
-      justify-content: space-between;
-      padding: 20px;
-    }
-    .kpi {
-      background-color: #eee;
-      border-radius: 5px;
-      box-shadow: 0 2px 3px #ccc;
-      width: 30%;
-      height: 200px;
-      margin: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      padding: 20px;
-    }
-    .kpi h3 {
-      margin: 0;
-    }
-    .kpi p {
-      font-size: 22px;
-      font-weight: bold;
-      margin: 0;
-    }
-    .kpi .gauge {
-      width: 100%;
-      height: 100px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-    .kpi .gauge .bar {
-      background-color: #ffa500;
-      width: 0%;
-      height: 100%;
-      transition: all 1s ease;
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
-    .kpi .gauge .bar.warning {
-      background-color: #f00;
-    }
-    .kpi .gauge .bar.success {
-      background-color: #0f0;
-    }
-    .kpi .gauge .label {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 18px;
-      font-weight: bold;
-      color: #333;
-    }
-    /* Add some styling for the graphs */
-    .graph {
-      width: 60%;
-      height: 300px;
-      margin: 20px;
-    }
+   
+#dashboard {
+  display: flex;
+  flex-wrap: wrap;
+}
+#filters {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+#kpis {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+}
+#kpis div {
+  width: 20%;
+  text-align: center;
+}
+#charts {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+}
+#charts canvas {
+  width: 48%;
+}
   </style>
 </head>
 <body>
-
-<!-- Navigation Bar -->
-<div class="navbar">
-  <a href="/">Home</a>
-  <a href="/data-input">Data Entry</a>
-  <a href="/balance">Daily Balance</a>
-  <a href="/about">About</a>
-  <a href="/dashboard" class="active">Dashboard</a>
-  <a href="/echeance">Echeance Calculator</a>
-  <a href="/instagram">Instagram</a>
+<div id="dashboard">
+  <div id="filters">
+    <label for="start-date">Start Date:</label>
+    <input type="date" id="start-date">
+    <label for="end-date">End Date:</label>
+    <input type="date" id="end-date">
+    <button id="filter-button">Filter</button>
+  </div>
+  <div id="kpis">
+    <div id="current-balance"></div>
+    <div id="income"></div>
+    <div id="expenses"></div>
+    <div id="net-income"></div>
+  </div>
+  <div id="charts">
+    <canvas id="balance-chart"></canvas>
+    <canvas id="spending-chart"></canvas>
+  </div>
 </div>
-
-<!-- Dashboard -->
-<div class="dashboard">
-  <!-- Key Performance Indicators (KPI) -->
-  <div class="kpi">
-    <h3>Total Income</h3>
-    <p id="total-income">0</p>
-  </div>
-
-<div class="kpi">
-    <h3>Total Expenses</h3>
-    <p id="total-expenses">0</p>
-  </div>
-  <div class="kpi">
-    <h3>Net Profit</h3>
-    <p id="net-profit">0</p>
-  </div>
-  <div class="kpi">
-    <h3>Current Balance</h3>
-    <div class="gauge">
-      <div class="bar" id="balance-bar"></div>
-      <span class="label" id="balance-label"></span>
-    </div>
-  </div>
-  <!-- Graphs -->
-  <div class="graph" id="income-expenses-graph"></div>
-  <div class="graph" id="profit-loss-graph"></div>
-</div>
-
-<!-- Footer -->
-<div class="footer">
-  <p>&copy; Financial Tracker</p>
-</div>
-
-<!-- Load the Google Charts library -->
-<script src="https://www.gstatic.com/charts/loader.js"></script>
-<!-- Load the LocalStorage polyfill for older browsers -->
-<script src="https://cdn.jsdelivr.net/npm/localstorage-polyfill@1.0.1/localStorage.min.js"></script>
-<!-- Load the moment.js library for date formatting and manipulation -->
-<script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
 
 <script>
-  // Initialize the Google Charts library
-  google.charts.load('current', { packages: ['corechart'] });
-  // Load the data from LocalStorage when the page finishes loading
-  window.addEventListener('load', function() {
-    // Get the transaction data from LocalStorage
-    let transactions = JSON.parse(localStorage.getItem('transactions'));
-    // Initialize the KPI values
-    let totalIncome = 0;
-    let totalExpenses = 0;
-    let netProfit = 0;
-    // Calculate the KPI values based on the transaction data
-    transactions.forEach(function(transaction) {
-      if (transaction.type === 'credit') {
-        totalIncome += transaction.amount;
-      } else {
-        totalExpenses += transaction.amount;
-      }
-    });
-    netProfit = totalIncome - totalExpenses;
-    // Update the KPI values on the page
-    document.getElementById('total-income').textContent = totalIncome.toFixed(2);
-    document.getElementById('total-expenses').textContent = totalExpenses.toFixed(2);
-    document.getElementById('net-profit').textContent = netProfit.toFixed(2);
-    // Update the balance bar and label based on the net profit
-    let balanceBar = document.getElementById('balance-bar');
-    let balanceLabel = document.getElementById('balance-label');
-    balanceBar.style.width = Math.abs(netProfit / totalIncome * 100) + '%';
-    balanceLabel.textContent = netProfit.toFixed(2);
-    if (netProfit < 0) {
-      balanceBar.classList.add('warning');
-      balanceLabel.style.color = '#f00';
-    } else if (netProfit > 0) {
-      balanceBar.classList.add('success');
-      balanceLabel.style.color = '#0f0';
-    }
-    // Prepare the data for the income/expenses graph
-    let incomeExpensesData = [['Date', 'Income', 'Expenses']];
-    transactions.forEach(function(transaction) {
-      let date = moment(transaction.date).format('MM/DD/YYYY');
-      let income = transaction.type === 'credit' ? transaction.amount : 0;
-      let expenses = transaction.type === 'debit' ? transaction.amount : 0;
-      incomeExpensesData.push([date, income, expenses]);
-    });
-    // Draw the income/expenses graph
-    google.charts.setOnLoadCallback(function() {
-      let data = google.visualization.arrayToDataTable(incomeExpensesData);
-      let options = {
-        title: 'Income vs. Expenses',
-        hAxis: {
-          title: 'Date',
-          format: 'MM/dd/yyyy'
-        },
-        vAxis: {
-          title: 'Amount'
-        }
-      };
-      let chart = new google.visualization.LineChart(document.getElementById('income-expenses-graph'));
-      chart.draw(data, options);
-    });
-    // Prepare the data for the profit/loss graph
-    let profitLossData = [['Date', 'Profit/Loss']];
-    let runningTotal = 0;
-    transactions.forEach(function(transaction) {
-      let date = moment(transaction.date).format('MM/DD/YYYY');
-      if (transaction.type === 'credit') {
-        runningTotal += transaction.amount;
-      } else {
-        runningTotal -= transaction.amount;
-      }
-      profitLossData.push([date, runningTotal]);
-    });
-    // Draw the profit/loss graph
-    google.charts.setOnLoadCallback(function() {
-      let data = google.visualization.arrayToDataTable(profitLossData);
-      let options = {
-        title: 'Profit/Loss',
-        hAxis: {
-          title: 'Date',
-          format: 'MM/dd/yyyy'
-        },
-        vAxis: {
-          title: 'Amount'
-        }
-      };
-      let chart = new google.visualization.LineChart(document.getElementById('profit-loss-graph'));
-      chart.draw(data, options);
-    });
+// Get transactions from local storage
+let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
+
+// Filter transactions based on start and end date
+let startDate = new Date();
+let endDate = new Date();
+document.getElementById("start-date").valueAsDate = startDate;
+document.getElementById("end-date").valueAsDate = endDate;
+document.getElementById("filter-button").addEventListener("click", function() {
+  startDate = new Date(document.getElementById("start-date").value);
+  endDate = new Date(document.getElementById("end-date").value);
+  filterAndUpdate();
+});
+
+function filterAndUpdate() {
+  // Filter transactions based on start and end date
+  transactions = transactions.filter(transaction => {
+    let date = new Date(transaction.date);
+    return date >= startDate && date <= endDate;
   });
+
+  // Group transactions by category
+  let categories = {};
+  transactions.forEach(transaction => {
+    let category = transaction.category || "Other";
+    if (!categories[category]) {
+      categories[category] = 0;
+    }
+    categories[category] += transaction.amount;
+  });
+
+  // Calculate current balance, income, expenses, and net income
+  let currentBalance = 0;
+  let income = 0;
+  let expenses = 0;
+  transactions.forEach(transaction => {
+    currentBalance += transaction.amount;
+    if (transaction.amount > 0) {
+      income += transaction.amount;
+    } else {
+      expenses -= transaction.amount;
+    }
+  });
+  let netIncome = income - expenses;
+
+  // Display KPI values
+  document.getElementById("current-balance").innerHTML = `Current Balance: ${currentBalance}`;
+  document.getElementById("income").innerHTML = `Income: ${income}`;
+  document.getElementById("expenses").innerHTML = `Expenses: ${expenses}`;
+  document.getElementById("net-income").innerHTML = `Net Income: ${netIncome}`;
+
+  // Create balance chart
+  let balanceData = transactions.map(transaction => {
+    return { x: new Date(transaction.date), y: currentBalance };
+  });
+  let balanceChart = new Chart(document.getElementById("balance-chart"), {
+    type: "line",
+    data: {
+      datasets: [{
+        label: "Current Balance",
+        data: balanceData,
+        backgroundColor: "rgba(0, 0, 255, 0.2)",
+        borderColor: "rgba(0, 0, 255, 1)",
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        x: {
+          type: "time",
+          distribution: "series",
+          time: {
+            unit: "month"
+          }
+        },
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+
+  // Create spending chart
+  let spendingData = Object.keys(categories).map(category => {
+    return { label: category, value: categories[category] };
+  });
+  let spendingChart = new Chart(document.getElementById("spending-chart"), {
+    type: "pie",
+    data: {
+      datasets: [{
+        data: spendingData,
+        backgroundColor: [
+          "rgba(255, 0, 0, 0.2)",
+          "rgba(0, 255, 0, 0.2)",
+          "rgba(0, 0, 255, 0.2)",
+          "rgba(255, 255, 0, 0.2)",
+          "rgba(0, 255, 255, 0.2)",
+          "rgba(255, 0, 255, 0.2)"
+        ],
+        borderColor: [
+          "rgba(255, 0, 0, 1)",
+          "rgba(0, 255, 0, 1)",
+          "rgba(0, 0, 255, 1)",
+          "rgba(255, 255, 0, 1)",
+          "rgba(0, 255, 255, 1)",
+          "rgba(255, 0, 255, 1)"
+        ],
+        borderWidth: 1
+      }],
+      labels: spendingData.map(data => data.label)
+    },
+    options: {
+      responsive: true,
+      legend: {
+        position: 'top',
+      },
+      title: {
+        display: true,
+        text: 'Spending by Category'
+      },
+      animation: {
+        animateScale: true,
+        animateRotate: true
+      }
+    }
+  });
+}
+
+// Initial load
+filterAndUpdate();
 </script>
 
 </body>
