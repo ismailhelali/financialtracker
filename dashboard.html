@@ -56,8 +56,13 @@
 </div>
 
 <script>
-// Get transactions from local storage
-let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
+  // Retrieve the transactions from local storage
+  let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+
+  // Sort the data 
+  transactions.sort((a, b) => new Date(a.date) - new Date(b.date));
+ 
+
 
 // Filter transactions based on start and end date
 let startDate = new Date();
