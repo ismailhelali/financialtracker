@@ -153,18 +153,15 @@ form.addEventListener('submit', e => {
 
 
   // Group the transactions by date
- groupedTransactions = transactions.reduce((acc, curr) => {
-    const dateArray = curr.date.split("-");
-    const newDate = [dateArray[1], dateArray[2]].join("-");
-    if (acc[newDate]) {
-      acc[newDate].push(curr);
+  const groupedTransactions = transactions.reduce((acc, curr) => {
+    const date = curr.date;
+    if (acc[date]) {
+      acc[date].push(curr);
     } else {
-      acc[newDate] = [curr];
+      acc[date] = [curr];
     }
     return acc;
   }, {});
- 
-
 
   // Set the initial balance to 0
   let balance = 0;
@@ -174,7 +171,7 @@ form.addEventListener('submit', e => {
     // Calculate the input, output, and balance for the group of transactions
     let input = 0;
     let output = 0;
-    groupedTransactions[newDate].forEach(t => {
+    groupedTransactions[date].forEach(t => {
       if (t.type === 'credit') {
         balance += Number(t.amount);
         input += Number(t.amount);
@@ -188,7 +185,7 @@ form.addEventListener('submit', e => {
     // Add a row to the table for the group of transactions
     historyTable.innerHTML += `
       <tr>
-        <td class="date">${newDate}</td>
+        <td class="date">${date}</td>
         <td>${input}</td>
         <td>${output}</td>
         <td>${balance}</td>
