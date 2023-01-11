@@ -123,14 +123,17 @@ form.addEventListener('submit', e => {
       <th>Balance</th>
     </tr>
   `;
+
+
+
   // Retrieve the transactions from local storage
   let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+
   // Sort the data 
   transactions.sort((a, b) => new Date(a.date) - new Date(b.date));
 
 
   // Group the transactions by date
-// Group the transactions by date
   const groupedTransactions = transactions.reduce((acc, curr) => {
     const date = curr.date;
     if (acc[date]) {
@@ -140,8 +143,6 @@ form.addEventListener('submit', e => {
     }
     return acc;
   }, {});
-
-
   // Set the initial balance to 0
   let balance = 0;
   // Iterate over the grouped transactions and add rows to the table for each group of transactions
