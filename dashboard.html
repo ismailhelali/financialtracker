@@ -3,178 +3,172 @@
 <head>
   <title>Financial days Tracker</title>
   <style> 
-    td.date {
-      text-align: left;
-      white-space: nowrap;
-    }    
-    form {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      width: 300px;
-      margin: 0 auto;
-      padding: 20px;
-      background-color: #fafafa;
-      border: 1px solid #dddddd;
-      border-radius: 4px;
-    }
-    form label {
-      font-size: 14px;
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
-    form input, form select {
-      width: 100%;
-      height: 32px;
-      padding: 0 8px;
-      margin-bottom: 16px;
-      border: 1px solid #dddddd;
-      border-radius: 4px;
-      font-size: 14px;
-    }
-    form button[type="submit"] {
-      width: 100%;
-      height: 32px;
-      background-color: #0000ff;
-      color: #ffffff;
-      border: none;
-      border-radius: 4px;
-      font-size: 14px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    form button[type="submit"]:hover {
-      background-color: #0000cc;
-    }
-    table {
-      width: 100%;
-      margin: 20px 0;
-      border-collapse: collapse;
-      font-family: Arial, sans-serif;
-      color: #333333;
-    }
-    th {
-      background-color: #f0f0f0;
-      border: 1px solid #dddddd;
-      text-align: left;
-      padding: 8px;
-      font-size: 14px;
-      font-weight: bold;
-    }
-    td {
-      border: 1px solid #dddddd;
-      text-align: left;
-      padding: 8px;
-      font-size: 14px;
-    }
-    tr:nth-child(even) {
-      background-color: #f2f2f2;
-    }
-    .amount {
-      text-align: right;
-    }
+td.date {
+  text-align: left;
+  white-space: nowrap;
+}    
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 300px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fafafa;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+}
+form label {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+form input, form select {
+  width: 100%;
+  height: 32px;
+  padding: 0 8px;
+  margin-bottom: 16px;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+form button[type="submit"] {
+  width: 100%;
+  height: 32px;
+  background-color: #0000ff;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+form button[type="submit"]:hover {
+  background-color: #0000cc;
+}
+table {
+  width: 100%;
+  margin: 20px 0;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  color: #333333;
+}
+th {
+  background-color: #f0f0f0;
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+  font-size: 14px;
+  font-weight: bold;
+}
+td {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+  font-size: 14px;
+}
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+.amount {
+  text-align: right;
+}
+ 
   </style>
 </head>
 <body>
   <h1>Solde journalier Tracker</h1>
-  <!-- Use a form to capture input from the user -->
-  <form id="date-filter-form">
-    <label for="start-date">Start Date:</label><br>
-    <input type="date" id="start-date"><br>
-    <label for="end-date">End Date:</label><br>
-    <input type="date" id="end-date"><br><br>
-    <label for="date-grouping">Group by:</label><br>
-    <select id="date-grouping">
-      <option value="day">Jour</option>
-      <option value="month">Mois</option>
-  <option value="year">Année</option>
-</select><br><br>
-<button type="submit">Filter Transactions</button>
-  </form> 
-  <!-- Display the transaction history -->
-  <h2>Transaction History</h2>
-  <table id="transaction-history">
+ <!-- Use a form to capture input from the user -->
+<form id="date-filter-form">
+  <label for="start-date">Start Date:</label><br>
+  <input type="date" id="start-date"><br>
+  <label for="end-date">End Date:</label><br>
+  <input type="date" id="end-date"><br><br>
+  <label for="date-grouping">Group by:</label><br>
+  <select id="date-grouping">
+    <option value="day">Jour</option>
+    <option value="month">Mois</option>
+    <option value="year">Année</option>
+  </select><br><br>
+  <button type="submit">Filter Transactions</button>
+</form> 
+<!-- Display the transaction history -->
+<h2>Transaction History</h2>
+<table id="transaction-history">
+  <tr>
+    <th>Date</th>
+    <th>Input</th>
+    <th>Output</th>
+    <th>Balance</th>
+  </tr>
+</table>
+<script>
+// Get a reference to the form and input fields
+const form = document.querySelector('#date-filter-form');
+const startDateField = document.querySelector('#start-date');
+const endDateField = document.querySelector('#end-date');
+const dateGroupingField = document.querySelector('#date-grouping');
+// Get a reference to the transaction history table
+const historyTable = document.querySelector('#transaction-history');
+// Set up an event listener for the form submission
+form.addEventListener('submit', e => {
+  // Prevent the default form submission behavior
+  e.preventDefault();
+  // Get the start and end dates from the form fields
+  const startDate = startDateField.value;
+  const endDate = endDateField.value;
+  const dateGrouping = dateGroupingField.value;
+  // Clear the table
+  historyTable.innerHTML = '';
+  // Add the table headers
+  historyTable.innerHTML = `
     <tr>
       <th>Date</th>
       <th>Input</th>
       <th>Output</th>
       <th>Balance</th>
     </tr>
-  </table>
-  <script>
-    const form = document.querySelector('#date-filter-form');
-    const startDateField = document.querySelector('#start-date');
-    const endDateField = document.querySelector('#end-date');
-    const dateGroupingField = document.querySelector('#date-grouping');
-    const historyTable = document.querySelector('#transaction-history');
+  `;
+  
+  // Retrieve the transactions from local storage
+  let transactionHistory = JSON.parse(localStorage.getItem('transactions')) || [];
+  // Sort the data 
+  transactionHistory.sort((a, b) => new Date(a.date) - new Date(b.date));
+  
+ 
+  // group the data according to the selected date grouping option
+  let groupedData = {};
+  if (dateGrouping === 'day') {
+    transactionHistory.forEach(({date, input, output, balance}) => {
+      groupedData[date] = {input, output, balance};
+    });
+  } else if (dateGrouping === 'month') {
+    transactionHistory.forEach(({date, input, output, balance}) => {
+      const month = date.slice(0, 7);
+      if (!groupedData[month]) {
+        groupedData[month] = { input: 0, output: 0, balance: 0 };
+      }
+      groupedData[month].input += input;
+      groupedData[month].output += output;
+      groupedData[month].balance += balance;
+    });
+  } else if (dateGrouping === 'year') {
+    transactionHistory.forEach(({date, input, output, balance}) => {
+      const year = date.slice(0, 4);
+      if (!groupedData[year]) {
+        groupedData[year] = { input: 0, output: 0, balance: 0 };
+      }
+      groupedData[year].input += input;
+      groupedData[year].output += output;
+      groupedData[year].balance += balance;
 
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-
-      // Get the form data
-      const startDate = startDateField.value;
-      const endDate = endDateField.value;
-      const dateGrouping = dateGroupingField.value;
-
-      // Validate the form data
-      if (!startDate || !endDate) {
-        alert('Please enter a start and end date.');
-        return;
+      if (t.type === 'credit') {
+        groupedData[year].balance += Number(t.amount);
+        groupedData[year].input += Number(t.amount);
+      } else {
+        groupedData[year].balance -= Number(t.amount);
+        groupedData[year].output += Number(t.amount);
       }
 
-      if (startDate > endDate) {
-        alert('Start date must be before end date.');
-        return;
-      }
-
-      // Clear any existing rows from the table
-      while (historyTable.rows.length > 1) {
-        historyTable.deleteRow(-1);
-      }
-
-      // Retrieve the transactions from local storage
-      let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
-
-      // Sort the data
-      transactions.sort((a, b) => new Date(a.date) - new Date(b.date));
-      
-      // Filter the data based on the selected date range and grouping
-      transactions = transactions.filter(transaction => {
-        const transactionDate = new Date(transaction.date);
-        return transactionDate >= startDate && transactionDate <= endDate;
-      });
-      
-      if (dateGrouping === 'month') {
-        transactions = groupByMonth(transactions);
-      } else if (dateGrouping === 'year') {
-        transactions = groupByyear(transactions);
-}
-
-
-  // Add the data to the table
-  transactions.forEach(transaction => {
-    const row = historyTable.insertRow();
-    const dateCell = row.insertCell();
-    const inputCell = row.insertCell();
-    const outputCell = row.insertCell();
-    const balanceCell = row.insertCell();
-    dateCell.innerHTML = transaction.date;
-    inputCell.innerHTML = transaction.input;
-    outputCell.innerHTML = transaction.output;
-    balanceCell.innerHTML = transaction.balance;
-    inputCell.classList.add("amount");
-    outputCell.classList.add("amount");
-    balanceCell.classList.add("amount");
-  });
-});
-
-function groupByMonth(transactions) {
-  // code for grouping transactions by month
-}
-
-function groupByYear(transactions) {
-  // code for grouping transactions by year
-}
-  </script>
-</body>
-</html>
+    });
+  }
