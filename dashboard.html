@@ -138,7 +138,6 @@ form.addEventListener('submit', e => {
   // Group the transactions by date
 // Group the transactions by date
   const groupedTransactions = transactions.reduce((acc, curr) => {
-    const date = curr.date;
     const date = curr.date.split('-')[2];
     if (acc[date]) {
       acc[date].push(curr);
