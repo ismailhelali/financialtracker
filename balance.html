@@ -116,6 +116,8 @@ tr:nth-child(even) {
 
 
 <script>
+  
+  const filterTransactions = () => {
   // Get a reference to the form and input fields
   const form = document.querySelector('#date-filter-form');
   const startDateField = document.querySelector('#start-date');
@@ -213,6 +215,7 @@ const dateFormatted = new Date(date).toLocaleDateString();
 historyTable.innerHTML += <tr> <td class="date">${dateFormatted}</td> <td class="amount">${input.toFixed(2)}</td> <td class="amount">${output.toFixed(2)}</td> <td class="amount">${balance.toFixed(2)}</td> </tr>;
 }
 });
+  }
 </script>
 
 </body>
