@@ -142,6 +142,28 @@ form.addEventListener('submit', e => {
   transactions.sort((a, b) => new Date(a.date) - new Date(b.date));
 
 
+function calculateBalance(startDate) {
+    let balance = 0;
+    for (const transaction of transactions) {
+        if (transaction.date < startDate) {
+            balance += transaction.input - transaction.output;
+        }
+    }
+    return balance;
+}
+
+  // Get a reference to the form and input fields
+  const form = document.querySelector('#date-filter-form');
+  const startDateInput = document.querySelector('#start-date');
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const startDate = startDateInput.value;
+    const balance = calculateBalance(startDate);
+    const balanceSpan = document.querySelector('#balance');
+    balanceSpan.textContent = balance;
+  });
+
+
   // Group the transactions by date
 const dateGrouping = document.getElementById("date-grouping").value;
 const enddate = document.getElementById("end-date").value;
@@ -225,31 +247,4 @@ if (dateGrouping === "month") {
 });
 </script>
 
-<script>
-// calculate-balance.js
-const transactions = localStorage.getItem("transactions")
-function calculateBalance(startDate) {
-    let balance = 0;
-    for (const transaction of transactions) {
-        if (transaction.date < startDate) {
-            balance += transaction.input - transaction.output;
-        }
-    }
-    return balance;
-}
 
-  // Get a reference to the form and input fields
-  const form = document.querySelector('#date-filter-form');
-  const startDateInput = document.querySelector('#start-date');
-  form.addEventListener('submit', (event) => {
-    event.preventDefault();
-    const startDate = startDateInput.value;
-    const balance = calculateBalance(startDate);
-    const balanceSpan = document.querySelector('#balance');
-    balanceSpan.textContent = balance;
-  });
-
-
-
-
-</script>
