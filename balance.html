@@ -109,6 +109,98 @@ tr:nth-child(even) {
 </html>
 <script>
 // Get a reference to the form and input fields
+const form1 = document.querySelector('#date-filter-form');
+const startDateField1 = document.querySelector('#start-date');
+const endDateField1 = document.querySelector('#end-date');
+// Get a reference to the transaction history table
+const historyTable1 = document.querySelector('#transaction-history');
+// Set up an event listener for the form submission
+form.addEventListener('submit', e => {
+  // Prevent the default form submission behavior
+  e.preventDefault();
+  // Get the start and end dates from the form fields
+  const startDate1 = startDateField1.value;
+  const endDate1 = endDateField1.value;
+  
+  // Retrieve the transactions from local storage
+  let transactions1 = JSON.parse(localStorage.getItem('transactions')) || [];
+  // Sort the data 
+  transactions1.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+
+  // Group the transactions by date
+const dateGrouping1 = document.getElementById("date-grouping").value;
+const enddate1 = document.getElementById("end-date").value;
+const startdate1 = document.getElementById("start-date").value;
+
+let groupedTransactions1;
+
+if (dateGrouping1 === "month") {
+  groupedTransactions1 = transactions1.filter(transaction => {
+    return new Date(transaction.date) < new Date(startdate1)
+  }).reduce((acc, curr) => {
+    const date = curr.date.split('-')[1];
+    if (acc[date]) {
+      acc[date].push(curr);
+    } else {
+      acc[date] = [curr];
+    }
+    return acc;
+  }, {});
+
+
+} else if (dateGrouping1 === "year") {
+  groupedTransactions1 = transactions1.filter(transaction => {
+    return new Date(transaction.date) < new Date(startdate)
+  }).reduce((acc, curr) => {
+    const date = curr.date.split('-')[0];
+    if (acc[date]) {
+      acc[date].push(curr);
+    } else {
+      acc[date] = [curr];
+    }
+    return acc;
+  }, {});
+} else {
+  groupedTransactions1 = transactions1.filter(transaction => {
+    return new Date(transaction.date) < new Date(startdate)
+  }).reduce((acc, curr) => {
+    const date = curr.date.split('-')[2];
+    if (acc[date]) {
+      acc[date].push(curr);
+    } else {
+      acc[date] = [curr];
+    }
+    return acc;
+  }, {});
+}
+
+
+
+  // Set the initial balance to previous balances
+  let pbalance = 0;
+  // Iterate over the grouped transactions and add rows to the table for each group of transactions
+  for (const date in groupedTransactions1) {
+    // Calculate the input, output, and balance for the group of transactions
+    let input1 = 0;
+    let output1 = 0;
+    groupedTransactions1[date].forEach(t => {
+      if (t.type === 'credit') {
+        pbalance += Number(t.amount);
+        input1 += Number(t.amount);
+      } else {
+        pbalance -= Number(t.amount);
+        output1 += Number(t.amount);
+      }
+    });
+    
+  }
+});
+</script>
+
+
+<script>
+// Get a reference to the form and input fields
 const form = document.querySelector('#date-filter-form');
 const startDateField = document.querySelector('#start-date');
 const endDateField = document.querySelector('#end-date');
@@ -191,7 +283,7 @@ if (dateGrouping === "month") {
 
 
   // Set the initial balance to previous balances
-  let balance = 0;
+  let balance = pbalance ;
   // Iterate over the grouped transactions and add rows to the table for each group of transactions
   for (const date in groupedTransactions) {
     // Calculate the input, output, and balance for the group of transactions
@@ -219,3 +311,5 @@ if (dateGrouping === "month") {
   }
 });
 </script>
+
+
