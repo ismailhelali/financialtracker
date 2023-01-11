@@ -152,9 +152,9 @@ form.addEventListener('submit', e => {
   transactions.sort((a, b) => new Date(a.date) - new Date(b.date));
 
 
-  // Group the transactions by date
+// Group the transactions by date
   const groupedTransactions = transactions.reduce((acc, curr) => {
-    const date = curr.date;
+    const date = curr.date.split('-')[2];
     if (acc[date]) {
       acc[date].push(curr);
     } else {
@@ -162,6 +162,7 @@ form.addEventListener('submit', e => {
     }
     return acc;
   }, {});
+  
 
   // Set the initial balance to 0
   let balance = 0;
