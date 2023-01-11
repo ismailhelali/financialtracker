@@ -2,8 +2,7 @@
 <html>
 <head>
   <title>Financial days Tracker</title>
-  <style>
-    
+  <style> 
 td.date {
   text-align: left;
   white-space: nowrap;
@@ -84,6 +83,7 @@ tr:nth-child(even) {
   text-align: right;
 }
 
+ 
   </style>
 </head>
 <body>
@@ -94,6 +94,12 @@ tr:nth-child(even) {
   <input type="date" id="start-date"><br>
   <label for="end-date">End Date:</label><br>
   <input type="date" id="end-date"><br><br>
+  <label for="date-grouping">Group by:</label><br>
+  <select id="date-grouping">
+    <option value="day">Jour</option>
+    <option value="month">Mois</option>
+    <option value="year">Année</option>
+  </select><br><br>
   <button type="submit">Filter Transactions</button>
 </form> 
 
@@ -108,16 +114,13 @@ tr:nth-child(even) {
   </tr>
 </table>
 
-
-</body>
-
-</html>
-
 <script>
 // Get a reference to the form and input fields
 const form = document.querySelector('#date-filter-form');
 const startDateField = document.querySelector('#start-date');
 const endDateField = document.querySelector('#end-date');
+const dateGroupingField = document.querySelector('#date-grouping');
+
 // Get a reference to the transaction history table
 const historyTable = document.querySelector('#transaction-history');
 
@@ -129,6 +132,7 @@ form.addEventListener('submit', e => {
   // Get the start and end dates from the form fields
   const startDate = startDateField.value;
   const endDate = endDateField.value;
+  const dateGrouping = dateGroupingField.value;
 
   // Clear the table
   historyTable.innerHTML = '';
@@ -142,57 +146,55 @@ form.addEventListener('submit', e => {
       <th>Balance</th>
     </tr>
   `;
-
-
-
+  
   // Retrieve the transactions from local storage
-  let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+  let transactionHistory = JSON.parse(localStorage.getItem('transactions')) || [];
 
   // Sort the data 
-  transactions.sort((a, b) => new Date(a.date) - new Date(b.date));
+  transactionHistory.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-
-// Group the transactions by date
-  const groupedTransactions = transactions.reduce((acc, curr) => {
-    const date = curr.date.split('-')[2];
-    if (acc[date]) {
-      acc[date].push(curr);
-    } else {
-      acc[date] = [curr];
-    }
-    return acc;
-  }, {});
   
-
-  // Set the initial balance to 0
-  let balance = 0;
-
-  // Iterate over the grouped transactions and add rows to the table for each group of transactions
-  for (const date in groupedTransactions) {
-    // Calculate the input, output, and balance for the group of transactions
-    let input = 0;
-    let output = 0;
-    groupedTransactions[date].forEach(t => {
-      if (t.type === 'credit') {
-        balance += Number(t.amount);
-        input += Number(t.amount);
-      } else {
-        balance -= Number(t.amount);
-        output += Number(t.amount);
-      }
+ 
+  // group the data according to the selected date grouping option
+  let groupedData = {};
+  if (dateGrouping === 'day') {
+    transactionHistory.forEach(({date, input, output, balance}) => {
+      groupedData[date] = {input, output, balance};
     });
-    
+  } else if (dateGrouping === 'month') {
+    transactionHistory.forEach(({date, input, output, balance}) => {
+      const month = date.slice(0, 7);
+      if (!groupedData[month]) {
+        groupedData[month] = { input: 0, output: 0, balance: 0 };
+      }
+      groupedData[month].input += input;
+      groupedData[month].output += output;
+      groupedData[month].balance += balance;
+    });
+  } else if (dateGrouping === 'year') {
+    transactionHistory.forEach(({date, input, output, balance}) => {
+      const year = date.slice(0, 4);
+      if (!groupedData[year]) {
+        groupedData[year] = { input: 0, output: 0, balance: 0 };
+      }
+      groupedData[year].input += input;
+      groupedData[year].output += output;
+      groupedData[year].balance += balance;
+    });
+  }
 
-    // Add a row to the table for the group of transactions
+  // Render the grouped data in the table
+  for (const [date, {input, output, balance}] of Object.entries(groupedData)) {
     historyTable.innerHTML += `
       <tr>
-        <td class="date">${date}</td>
-        <td>${input}</td>
-        <td>${output}</td>
-        <td>${balance}</td>
+        <td>${date}</td>
+        <td class="amount">${input}</td>
+        <td class="amount">${output}</td>
+        <td class="amount">${balance}</td>
       </tr>
     `;
   }
 });
-
 </script>
+</body>
+</html>
