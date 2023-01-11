@@ -83,7 +83,12 @@ tr:nth-child(even) {
   <label for="start-date">Start Date:</label><br>
   <input type="date" id="start-date"><br>
   <label for="end-date">End Date:</label><br>
-  <input type="date" id="end-date"><br><br>
+  <select id="date-grouping">
+      <option value="day">Jour</option>
+      <option value="month">Mois</option>
+      <option value="year">Année</option>
+</select><br><br>
+  <br>
   <button type="submit">Filter Transactions</button>
 </form> 
 <!-- Display the transaction history -->
