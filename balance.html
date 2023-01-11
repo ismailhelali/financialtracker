@@ -202,7 +202,7 @@ if (dateGrouping === "month") {
     // Calculate the input, output, and balance for the group of transactions
     let input = 0;
     let output = 0;
-    groupedTransactions[date].forEach(t => {
+    Transactions[date].forEach(t => {
       if (t.type === 'credit') {
         balance += Number(t.amount);
         input += Number(t.amount);
