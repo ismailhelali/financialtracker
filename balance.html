@@ -138,9 +138,12 @@ form.addEventListener('submit', e => {
 
   // Group the transactions by date
 const dateGrouping = document.getElementById("date-grouping").value;
+const enddate = document.getElementById("end-date").value;
+const startdate = document.getElementById("start-date").value;
+
 let groupedTransactions;
 
-if (dateGrouping === "month" && transactions.date < endDate) {
+if (dateGrouping === "month" && transactions.date < enddate) {
   groupedTransactions = transactions.reduce((acc, curr) => {
     const date = curr.date.split('-')[1];
     if (acc[date]) {
