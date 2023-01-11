@@ -159,7 +159,10 @@ if (dateGrouping === "month") {
 
 
 } else if (dateGrouping === "year") {
-  groupedTransactions = transactions.reduce((acc, curr) => {
+  groupedTransactions = transactions.filter(transaction => {
+    return new Date(transaction.date) < new Date(enddate) 
+    && new Date(transaction.date) > new Date(startdate)
+  }).reduce((acc, curr) => {
     const date = curr.date.split('-')[0];
     if (acc[date]) {
       acc[date].push(curr);
@@ -168,9 +171,11 @@ if (dateGrouping === "month") {
     }
     return acc;
   }, {});
-
 } else {
-  groupedTransactions = transactions.reduce((acc, curr) => {
+  groupedTransactions = transactions.filter(transaction => {
+    return new Date(transaction.date) < new Date(enddate) 
+    && new Date(transaction.date) > new Date(startdate)
+  }).reduce((acc, curr) => {
     const date = curr.date.split('-')[2];
     if (acc[date]) {
       acc[date].push(curr);
