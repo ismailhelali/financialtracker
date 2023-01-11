@@ -80,12 +80,7 @@ tr:nth-child(even) {
 <body>
   <h1>Solde journalier Tracker</h1>
   
-  <!-- Display the current balance and input/output -->
-  <h2>Current Balance: <span id="balance">0</span></h2>
-  <h3>Input: <span id="input">0</span></h3>
-  <h3>Output: <span id="output">0</span></h3>
-  
-  
+
  <!-- Use a form to capture input from the user -->
 <form id="date-filter-form">
   <label for="start-date">Start Date:</label><br>
@@ -193,43 +188,10 @@ if (dateGrouping === "month") {
   }, {});
 }
 
-  
-let previousTransactions;
 
-  previousTransactions = transactions.filter(transaction => {
-    return new Date(transaction.date) < new Date(startdate) 
-   
-  }).reduce((acc, curr) => {
-    const date = curr.date;
-    if (acc[date]) {
-      acc[date].push(curr);
-    } else {
-      acc[date] = [curr];
-    }
-    return acc;
-  }, {});
-  
-
- // calculat previous balance
-  let balances = 0;
-  // Iterate over the grouped transactions and add rows to the table for each group of transactions
-  for (const date in previousTransactions) {
-    // Calculate the input, output, and balance for the group of transactions
-    let inputs = 0;
-    let outputs = 0;
-    previousTransactions[date].forEach(t => {
-      if (t.type === 'credit') {
-        balances += Number(t.amount);
-        inputs += Number(t.amount);
-      } else {
-        balances -= Number(t.amount);
-        outputs += Number(t.amount);
-      }
-    });
-  
 
   // Set the initial balance to previous balances
-  let balance = balances;
+  let balance = 0;
   // Iterate over the grouped transactions and add rows to the table for each group of transactions
   for (const date in groupedTransactions) {
     // Calculate the input, output, and balance for the group of transactions
