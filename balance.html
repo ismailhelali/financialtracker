@@ -125,21 +125,28 @@ form.addEventListener('submit', e => {
       <th>Balance</th>
     </tr>
   `;
+// Retrieve the transactions from local storage
+let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+
+// Set the starting and ending date range
+// Get start and end date values from form inputs
+const startDateInput = document.getElementById("start-date");
+const endDateInput = document.getElementById("end-date");
+const startDate = new Date(startDateInput.value);
+const endDate = new Date(endDateInput.value);
 
 
+// Filter the transactions based on date range
+transactions = transactions.filter(transaction => {
+  const transactionDate = new Date(transaction.date);
+  return transactionDate >= startDate && transactionDate <= endDate;
+});
 
-  // Retrieve the transactions from local storage
-  let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+// Sort the data
+transactions.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-  // Sort the data 
-  transactions.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-  
-   // Filter the transactions based on the start and end dates
-    const filteredTransactions = transactions.filter(transaction => {
-        const Date = new Date(transaction.date);
-        return Date >= startDate && transactionDate <= endDate;
-    });
+ 
 
   // Group the transactions by date
   const groupedTransactions = transactions.reduce((acc, curr) => {
