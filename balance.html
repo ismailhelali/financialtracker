@@ -177,9 +177,15 @@ form.addEventListener('submit', e => {
       if (!groupedData[year]) {
         groupedData[year] = { input: 0, output: 0, balance: 0 };
       }
-      groupedData[year].input += input;
-      groupedData[year].output += output;
-      groupedData[year].balance += balance;
+      
+      if (t.type === 'credit') {
+        groupedData[year].balance += Number(t.amount);
+        groupedData[year].input += Number(t.amount);
+      } else {
+        groupedData[year].balance -= Number(t.amount);
+        groupedData[year].output += Number(t.amount);
+      }
+      
     });
   }
 
