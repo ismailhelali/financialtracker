@@ -1,19 +1,79 @@
+
 <!DOCTYPE html>
 <html>
 <head>
   <title>Financial days Tracker</title>
   <style>
- table {
-  border-collapse: collapse;
-  width: 100%;
+    
+td.date {
+  text-align: left;
+  white-space: nowrap;
+}    
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 300px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fafafa;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
 }
-td, th {
+form label {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+form input, form select {
+  width: 100%;
+  height: 32px;
+  padding: 0 8px;
+  margin-bottom: 16px;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+form button[type="submit"] {
+  width: 100%;
+  height: 32px;
+  background-color: #0000ff;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+form button[type="submit"]:hover {
+  background-color: #0000cc;
+}
+table {
+  width: 100%;
+  margin: 20px 0;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  color: #333333;
+}
+th {
+  background-color: #f0f0f0;
   border: 1px solid #dddddd;
   text-align: left;
   padding: 8px;
+  font-size: 14px;
+  font-weight: bold;
+}
+td {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+  font-size: 14px;
 }
 tr:nth-child(even) {
-  background-color: #dddddd;
+  background-color: #f2f2f2;
+}
+.amount {
+  text-align: right;
 }
   </style>
 </head>
@@ -24,10 +84,15 @@ tr:nth-child(even) {
   <label for="start-date">Start Date:</label><br>
   <input type="date" id="start-date"><br>
   <label for="end-date">End Date:</label><br>
-  <input type="date" id="end-date"><br><br>
+  <input type="date" id="end-date"><br>
+  <select id="date-grouping">
+      <option value="day">Jour</option>
+      <option value="month">Mois</option>
+      <option value="year">Année</option>
+</select><br><br>
+  <br>
   <button type="submit">Filter Transactions</button>
 </form> 
-
 <!-- Display the transaction history -->
 <h2>Transaction History</h2>
 <table id="transaction-history">
@@ -38,12 +103,8 @@ tr:nth-child(even) {
     <th>Balance</th>
   </tr>
 </table>
-
-
 </body>
-
 </html>
-
 <script>
 // Get a reference to the form and input fields
 const form = document.querySelector('#date-filter-form');
@@ -51,19 +112,15 @@ const startDateField = document.querySelector('#start-date');
 const endDateField = document.querySelector('#end-date');
 // Get a reference to the transaction history table
 const historyTable = document.querySelector('#transaction-history');
-
 // Set up an event listener for the form submission
 form.addEventListener('submit', e => {
   // Prevent the default form submission behavior
   e.preventDefault();
-
   // Get the start and end dates from the form fields
   const startDate = startDateField.value;
   const endDate = endDateField.value;
-
   // Clear the table
   historyTable.innerHTML = '';
-
   // Add the table headers
   historyTable.innerHTML = `
     <tr>
@@ -73,13 +130,19 @@ form.addEventListener('submit', e => {
       <th>Balance</th>
     </tr>
   `;
-
   // Retrieve the transactions from local storage
   let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+  // Sort the data 
+  transactions.sort((a, b) => new Date(a.date) - new Date(b.date));
+
 
   // Group the transactions by date
-  const groupedTransactions = transactions.reduce((acc, curr) => {
-    const date = curr.date.split('-')[2];
+const dateGrouping = document.getElementById("date-grouping").value;
+let groupedTransactions;
+
+if (dateGrouping === "month" && transactions.date < endDate) {
+  groupedTransactions = transactions.reduce((acc, curr) => {
+    const date = curr.date.split('-')[1];
     if (acc[date]) {
       acc[date].push(curr);
     } else {
@@ -88,9 +151,33 @@ form.addEventListener('submit', e => {
     return acc;
   }, {});
 
+} else if (dateGrouping === "year") {
+  groupedTransactions = transactions.reduce((acc, curr) => {
+    const date = curr.date.split('-')[0];
+    if (acc[date]) {
+      acc[date].push(curr);
+    } else {
+      acc[date] = [curr];
+    }
+    return acc;
+  }, {});
+
+} else {
+  groupedTransactions = transactions.reduce((acc, curr) => {
+    const date = curr.date.split('-')[2];
+    if (acc[date]) {
+      acc[date].push(curr);
+    } else {
+      acc[date] = [curr];
+    }
+    return acc;
+  }, {});
+}
+
+
+
   // Set the initial balance to 0
   let balance = 0;
-
   // Iterate over the grouped transactions and add rows to the table for each group of transactions
   for (const date in groupedTransactions) {
     // Calculate the input, output, and balance for the group of transactions
@@ -98,18 +185,18 @@ form.addEventListener('submit', e => {
     let output = 0;
     groupedTransactions[date].forEach(t => {
       if (t.type === 'credit') {
-        balance += t.amount;
-        input += t.amount;
+        balance += Number(t.amount);
+        input += Number(t.amount);
       } else {
-        balance -= t.amount;
-        output += t.amount;
+        balance -= Number(t.amount);
+        output += Number(t.amount);
       }
     });
-
+    
     // Add a row to the table for the group of transactions
     historyTable.innerHTML += `
       <tr>
-        <td>${date}</td>
+        <td class="date">${date}</td>
         <td>${input}</td>
         <td>${output}</td>
         <td>${balance}</td>
@@ -117,5 +204,4 @@ form.addEventListener('submit', e => {
     `;
   }
 });
-
 </script>
