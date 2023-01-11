@@ -164,7 +164,7 @@ function calculateBalance(startDate) {
 
   // Get a reference to the form and input fields
   const form = document.querySelector('#date-filter-form');
-  const startDateInput = document.querySelector('#start-date');
+  const startDateInput = document.getElementById("start-date").value;
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     const startDate = startDateInput.value;
