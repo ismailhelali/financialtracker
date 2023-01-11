@@ -112,6 +112,12 @@ form.addEventListener('submit', e => {
   // Get the start and end dates from the form fields
   const startDate = startDateField.value;
   const endDate = endDateField.value;
+  // Filter the transactions based on the start and end dates
+    const filteredTransactions = transactions.filter(transaction => {
+        const transactionDate = new Date(transaction.date);
+        return transactionDate >= startDate && transactionDate <= endDate;
+    });
+  
   // Clear the table
   historyTable.innerHTML = '';
   // Add the table headers
