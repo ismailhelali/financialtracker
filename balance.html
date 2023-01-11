@@ -144,9 +144,19 @@ form.addEventListener('submit', e => {
 
 function calculateBalance(startDate) {
     let balance = 0;
+    let input = 0;
+    let output = 0;
     for (const transaction of transactions) {
         if (transaction.date < startDate) {
-            balance += transaction.input - transaction.output;
+            
+      if (t.type === 'credit') {
+        balance += Number(t.amount);
+        input += Number(t.amount);
+      } else {
+        balance -= Number(t.amount);
+        output += Number(t.amount);
+      }
+
         }
     }
     return balance;
