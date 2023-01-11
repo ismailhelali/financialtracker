@@ -79,6 +79,13 @@ tr:nth-child(even) {
 </head>
 <body>
   <h1>Solde journalier Tracker</h1>
+  
+  <!-- Display the current balance and input/output -->
+  <h2>Current Balance: <span id="balance">0</span></h2>
+  <h3>Input: <span id="input">0</span></h3>
+  <h3>Output: <span id="output">0</span></h3>
+  
+  
  <!-- Use a form to capture input from the user -->
 <form id="date-filter-form">
   <label for="start-date">Start Date:</label><br>
@@ -186,6 +193,26 @@ if (dateGrouping === "month") {
   }, {});
 }
 
+  
+  // Update the balance and input/output values
+  let balancee = 0;
+  let input = 0;
+  let output = 0;
+  transactions.forEach(t => {
+    if (t.type === 'credit') {
+      balancee += parseInt(t.amount);
+      input += parseInt(t.amount);
+    } else {
+      balancee -= parseInt(t.amount);
+      output += parseInt(t.amount);
+    }
+  });
+  balanceField.textContent = balancee;
+  inputField.textContent = input;
+  outputField.textContent = output;
+  
+  
+  
 
 
   // Set the initial balance to 0
