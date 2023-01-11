@@ -215,8 +215,8 @@ let previousTransactions;
   // Iterate over the grouped transactions and add rows to the table for each group of transactions
   for (const date in previousTransactions) {
     // Calculate the input, output, and balance for the group of transactions
-    let input = 0;
-    let output = 0;
+    let inputs = 0;
+    let outputs = 0;
     previousTransactions[date].forEach(t => {
       if (t.type === 'credit') {
         balances += Number(t.amount);
