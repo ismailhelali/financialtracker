@@ -143,8 +143,11 @@ const startdate = document.getElementById("start-date").value;
 
 let groupedTransactions;
 
-if (dateGrouping === "month" && transactions.date < enddate) {
-  groupedTransactions = transactions.reduce((acc, curr) => {
+if (dateGrouping === "month") {
+  groupedTransactions = transactions.filter(transaction => {
+    return new Date(transaction.date) < new Date(enddate) 
+    && new Date(transaction.date) > new Date(startdate)
+  }).reduce((acc, curr) => {
     const date = curr.date.split('-')[1];
     if (acc[date]) {
       acc[date].push(curr);
@@ -153,6 +156,7 @@ if (dateGrouping === "month" && transactions.date < enddate) {
     }
     return acc;
   }, {});
+}
 
 } else if (dateGrouping === "year") {
   groupedTransactions = transactions.reduce((acc, curr) => {
