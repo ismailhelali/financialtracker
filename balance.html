@@ -128,13 +128,6 @@ form.addEventListener('submit', e => {
 // Retrieve the transactions from local storage
 let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
 
-// Set the starting and ending date range
-// Get start and end date values from form inputs
-const startDateInput = document.getElementById("start-date");
-const endDateInput = document.getElementById("end-date");
-const startDate = new Date(startDateInput.value);
-const endDate = new Date(endDateInput.value);
-
 
 // Filter the transactions based on date range
 transactions = transactions.filter(transaction => {
