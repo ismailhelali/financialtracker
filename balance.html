@@ -147,7 +147,43 @@ form.addEventListener('submit', e => {
 const dateGrouping = document.getElementById("date-grouping").value;
 const enddate = document.getElementById("end-date").value;
 const startdate = document.getElementById("start-date").value;
+ 
+let secondGroupedTransactions;
 
+  secondGroupedTransactions = transactions.filter(transaction => {
+    return new Date(transaction.date) < new Date(startdate)
+  }).reduce((acc, curr) => {
+    const date = curr.date.split('-')[2];
+    if (acc[date]) {
+      acc[date].push(curr);
+    } else {
+      acc[date] = [curr];
+    }
+    return acc;
+  }, {});
+  
+// calculate the previous balances
+  let balances = 0;
+  // Iterate over the second grouped transactions 
+  for (const date in secondGroupedTransactions) {
+    // Calculate the input, output, and balance for the group of transactions
+    let inputs = 0;
+    let outputs = 0;
+    groupedTransactions[date].forEach(t => {
+      if (t.type === 'credit') {
+        balances += Number(t.amount);
+        inputs += Number(t.amount);
+      } else {
+        balances -= Number(t.amount);
+        outputs += Number(t.amount);
+      }
+    });
+    }
+});
+  
+  
+  
+  
 let groupedTransactions;
 
 if (dateGrouping === "month") {
