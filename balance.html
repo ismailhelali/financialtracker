@@ -140,14 +140,14 @@ form.addEventListener('submit', e => {
   let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
   // Sort the data 
   transactions.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-
-
   // Group the transactions by date
 const dateGrouping = document.getElementById("date-grouping").value;
 const enddate = document.getElementById("end-date").value;
 const startdate = document.getElementById("start-date").value;
-   
+
+
+
+
 let groupedTransactions;
 
 if (dateGrouping === "month") {
@@ -163,8 +163,6 @@ if (dateGrouping === "month") {
     }
     return acc;
   }, {});
-
-
 } else if (dateGrouping === "year") {
   groupedTransactions = transactions.filter(transaction => {
     return new Date(transaction.date) < new Date(enddate) 
@@ -191,9 +189,7 @@ if (dateGrouping === "month") {
     }
     return acc;
   }, {});
-
-
-
+}
     
   // Set the initial balance to previous balances
   let balance = 0;
@@ -224,5 +220,3 @@ if (dateGrouping === "month") {
   }
 });
 </script>
-
-
