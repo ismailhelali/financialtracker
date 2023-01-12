@@ -157,6 +157,12 @@ form.addEventListener('submit', event => {
     balance.innerText = previousBalance;
     // your code to filter the transactions
 
+  // Sort the data 
+  transactions.sort((a, b) => new Date(a.date) - new Date(b.date));
+// Group the transactions by date
+const dateGrouping = document.getElementById("date-grouping").value;
+const enddate = document.getElementById("end-date").value;
+const startdate = document.getElementById("start-date").value;
 let groupedTransactions;
 
 if (dateGrouping === "month") {
