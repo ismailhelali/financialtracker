@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Financial days Tracker</title>
+  <style>
+    
+td.date {
+  text-align: left;
+  white-space: nowrap;
+}    
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 300px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fafafa;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+}
+form label {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+form input, form select {
+  width: 100%;
+  height: 32px;
+  padding: 0 8px;
+  margin-bottom: 16px;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+form button[type="submit"] {
+  width: 100%;
+  height: 32px;
+  background-color: #0000ff;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+form button[type="submit"]:hover {
+  background-color: #0000cc;
+}
+table {
+  width: 100%;
+  margin: 20px 0;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  color: #333333;
+}
+th {
+  background-color: #f0f0f0;
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+  font-size: 14px;
+  font-weight: bold;
+}
+td {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+  font-size: 14px;
+}
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+.amount {
+  text-align: right;
+}
+  </style>
+</head>
+<body>
+  <h1>Solde journalier Tracker</h1>
+  
+  <!-- Display the current balance and input/output -->
+  <h2>Previous Balance: <span id="previous-balance">0</span></h2>
+  <h2>Current Balance: <span id="balance">0</span></h2>
+  <h3>Input: <span id="input">0</span></h3>
+  <h3>Output: <span id="output">0</span></h3>
+  
+  
+ <!-- Use a form to capture input from the user -->
+<form id="date-filter-form">
+  <label for="start-date">Start Date:</label><br>
+  <input type="date" id="start-date"><br>
+  
+  <label for="end-date">End Date:</label><br>
+  <input type="date" id="end-date"><br>
+  <select id="date-grouping">
+      <option value="day">Jour</option>
+      <option value="month">Mois</option>
+      <option value="year">Année</option>
+  </select><br><br>
+  <br>
+  <button type="submit">Filter Transactions</button>
+</form> 
+<!-- Display the transaction history -->
+<h2>Transaction History</h2>
+<table id="transaction-history">
+  <tr>
+    <th>Date</th>
+    <th>Input</th>
+    <th>Output</th>
+    <th>Balance</th>
+  </tr>
+</table>
+
+<script>
+// array of transactions
+const transactions = [
+    { date: '2022-01-01', type: 'credit'', amount: 1000 },
+    { date: '2022-01-02', type: 'credit'', amount: 2000 },
+    { date: '2022-01-03', type: 'debit', amount: 500 },
+    { date: '2022-01-04', type: 'credit'', amount: 1500 },
+    { date: '2022-01-05', type: 'debit', amount: 100 },
+    { date: '2022-01-06', type: 'credit'', amount: 800 },
+];
+
+function calculatePreviousBalance(startDate) {
+    // retrieve the transactions that occurred before the start-date
+    const previousTransactions = transactions.filter(transaction => {
+        return new Date(transaction.date) < startDate;
+    });
+    // iterate through the transactions to calculate the balance
+    let previousBalance = 0;
+    previousTransactions.forEach(transaction => {
+        if (transaction.type === 'credit'') {
+            previousBalance += transaction.amount;
+        } else {
+            previousBalance -= transaction.amount;
+        }
+    });
+    return previousBalance;
+}
+
+// Get a reference to the form and input fields
+const form = document.querySelector('#date-filter-form');
+const startDateField = document.querySelector('#start-date');
+const endDateField = document.querySelector('#end-date');
+
+form.addEventListener('submit', event => {
+    event.preventDefault();
+    // Get the start and end dates from the form input fields
+    const startDate = new Date(startDateField.value);
+    const endDate = new Date(endDateField.value);
+    // call the function
+    const previousBalance = calculatePreviousBalance(startDate);
+    // update the balance span 
+    const balance = document.querySelector('#previous-balance');
+    balance.innerText = previousBalance;
+    // your code to filter the transactions
+
+let groupedTransactions;
+
+if (dateGrouping === "month") {
+  groupedTransactions = transactions.filter(transaction => {
+    return new Date(transaction.date) < new Date(enddate) 
+    && new Date(transaction.date) > new Date(startdate)
+  }).reduce((acc, curr) => {
+    const date = curr.date.split('-')[1];
+    if (acc[date]) {
+      acc[date].push(curr);
+    } else {
+      acc[date] = [curr];
+    }
+    return acc;
+  }, {});
+} else if (dateGrouping === "year") {
+  groupedTransactions = transactions.filter(transaction => {
+    return new Date(transaction.date) < new Date(enddate) 
+    && new Date(transaction.date) > new Date(startdate)
+  }).reduce((acc, curr) => {
+    const date = curr.date.split('-')[0];
+    if (acc[date]) {
+      acc[date].push(curr);
+    } else {
+      acc[date] = [curr];
+    }
+    return acc;
+  }, {});
+} else {
+  groupedTransactions = transactions.filter(transaction => {
+    return new Date(transaction.date) < new Date(enddate) 
+    && new Date(transaction.date) > new Date(startdate)
+  }).reduce((acc, curr) => {
+    const date = curr.date.split('-')[2];
+    if (acc[date]) {
+      acc[date].push(curr);
+    } else {
+      acc[date] = [curr];
+    }
+    return acc;
+  }, {});
+}
+    
+  // Set the initial balance to previous balances
+  let balance = 0;
+  // Iterate over the grouped transactions and add rows to the table for each group of transactions
+  for (const date in groupedTransactions) {
+    // Calculate the input, output, and balance for the group of transactions
+    let input = 0;
+    let output = 0;
+    groupedTransactions[date].forEach(t => {
+      if (t.type === 'credit') {
+        balance += Number(t.amount);
+        input += Number(t.amount);
+      } else {
+        balance -= Number(t.amount);
+        output += Number(t.amount);
+      }
+    });
+    
+    // Add a row to the table for the group of transactions
+    historyTable.innerHTML += `
+      <tr>
+        <td class="date">${date}</td>
+        <td>${input}</td>
+        <td>${output}</td>
+        <td>${balance}</td>
+      </tr>
+    `;
+  }
+});
+});
+</script>
+</body>
+</html>
