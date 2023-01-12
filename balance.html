@@ -81,6 +81,7 @@ tr:nth-child(even) {
   
   <!-- Display the current balance and input/output -->
   <h2>Current Balance: <span id="balance">0</span></h2>
+  <h2>Previous Balance: <span id="prebalance"></span></h2>
   <h3>Input: <span id="input">0</span></h3>
   <h3>Output: <span id="output">0</span></h3>
   
@@ -159,6 +160,12 @@ let preTr = [];
     previousBalance = previousBalance+element;
   }
 console.log(previousBalance);
+const img = document.createElement("h1");
+img.textContent=previousBalance;
+const previousB = document.getElementById("prebalance");
+previousB.innerHTML="";
+previousB.appendChild(img);
+
 
 
 let groupedTransactions;
@@ -206,6 +213,9 @@ if (dateGrouping === "month") {
     
   // Set the initial balance to previous balances
   let balance = 0;
+ 
+  
+   
   // Iterate over the grouped transactions and add rows to the table for each group of transactions
   for (const date in groupedTransactions) {
     // Calculate the input, output, and balance for the group of transactions
@@ -228,8 +238,10 @@ if (dateGrouping === "month") {
         <td>${input}</td>
         <td>${output}</td>
         <td>${balance}</td>
+        
       </tr>
     `;
   }
+
 });
 </script>
