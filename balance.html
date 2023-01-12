@@ -196,11 +196,10 @@ if (dateGrouping === "month") {
  
 let secondGroupedTransactions;
 
-if (transactionType === "debit") {
   secondGroupedTransactions = transactions.filter(transaction => {
-    return transaction.type === "debit" && new Date(transaction.date) < new Date(startdate)
+    return new Date(transaction.date) < new Date(startdate)
   }).reduce((acc, curr) => {
-    const date = curr.date.split('-')[1];
+    const date = curr.date.split('-')[2];
     if (acc[date]) {
       acc[date].push(curr);
     } else {
@@ -208,8 +207,7 @@ if (transactionType === "debit") {
     }
     return acc;
   }, {});
-}
-
+  
 
   // Set the initial balance to previous balances
   let balance = 0;
