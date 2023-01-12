@@ -145,7 +145,20 @@ const dateGrouping = document.getElementById("date-grouping").value;
 const enddate = document.getElementById("end-date").value;
 const startdate = document.getElementById("start-date").value;
 
+let preTr = [];
+  let previousBalance=0;
+  preTransactions = transactions.filter(transaction => {
+    
+    if(new Date(transaction.date) < new Date(startdate)){
+     preTr.push(transaction);
+    }
+  });
 
+  for (let index = 0; index < preTr.length; index++) {
+    var element = preTr[index].amount*1;
+    previousBalance = previousBalance+element;
+  }
+console.log(previousBalance);
 
 
 let groupedTransactions;
