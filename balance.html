@@ -195,7 +195,7 @@ if (dateGrouping === "month") {
 
  
 let secondGroupedTransactions;
-const startdate = document.getElementById("start-date").value;
+
 if (transactionType === "debit") {
   secondGroupedTransactions = transactions.filter(transaction => {
     return transaction.type === "debit" && new Date(transaction.date) < new Date(startdate)
