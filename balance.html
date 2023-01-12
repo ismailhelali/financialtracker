@@ -171,6 +171,9 @@ function calculateBalance(startDate) {
     const balances = calculateBalance(startDate);
     const balanceSpan = document.querySelector('#balance');
     balanceSpan.textContent = balances;
+
+let balance = calculateBalance(startDate);
+console.log(balance);
   });
 
 
