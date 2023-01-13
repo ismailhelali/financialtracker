@@ -5,9 +5,24 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
   <script>
 
-// Retrieve the transactions from local storage
+// Get a reference to the transaction history table
+    const historyTable = document.querySelector('#transaction-history');
+   
+;
+    
+  // Load the transaction history from local storage and display it
   let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
-
+  transactions.forEach(transaction => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${transaction.date}</td>
+      <td>${transaction.amount}</td>
+      <td>${transaction.reference}</td>
+      <td>${transaction.type}</td>
+      <td>${transaction.name}</td>
+    `;
+    historyTable.appendChild(row);
+  });
     // Function to clear LocalStorage
     function clearLocalStorage() {
       if (confirm("Are you sure you want to clear all transactions?")) {
@@ -67,27 +82,6 @@
 
   
 
-  <script>
-
-    // Get a reference to the transaction history table
-    const historyTable = document.querySelector('#transaction-history');
-   
-;
-    
-  // Load the transaction history from local storage and display it
-  const transactions = JSON.parse(localStorage.getItem('transactions')) || [];
-  transactions.forEach(transaction => {
-    const row = document.createElement('tr');
-    row.innerHTML = `
-      <td>${transaction.date}</td>
-      <td>${transaction.amount}</td>
-      <td>${transaction.reference}</td>
-      <td>${transaction.type}</td>
-      <td>${transaction.name}</td>
-    `;
-    historyTable.appendChild(row);
-  });
-
-</script>
+  
 
 
