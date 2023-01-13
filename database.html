@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+  <script>
+    // Function to clear LocalStorage
+    function clearLocalStorage() {
+      if (confirm("Are you sure you want to clear all transactions?")) {
+        localStorage.clear();
+        alert("Transactions cleared!");
+      }
+    }
+
+    // Function to save transactions as a PDF
+    function saveTransactions() {
+      if (confirm("Are you sure you want to save the transactions as a PDF?")) {
+        var doc = new jsPDF();
+        var transactionTable = document.getElementById("transaction-history");
+        var tableData = "";
+        
+        // Get the data from the table
+        for (var i = 0; i < transactionTable.rows.length; i++) {
+          tableData += transactionTable.rows[i].innerHTML + "\n";
+        }
+        
+        // Add the table data to the PDF
+        doc.text(tableData, 10, 10);
+        
+        // Save the PDF
+        doc.save("transactions.pdf");
+        alert("Transactions saved as PDF!");
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <button class="clear-button" onclick="clearLocalStorage()">Clear Transactions</button>
+    <button class="save-button" onclick="saveTransactions()">Save Transactions as PDF</button>
+  </div>
+</body>
+</html>
