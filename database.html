@@ -44,5 +44,51 @@
     <button class="clear-button" onclick="clearLocalStorage()">Clear Transactions</button>
     <button class="save-button" onclick="saveTransactions()">Save Transactions as PDF</button>
   </div>
+
+
+<h1>Financial Tracker database</h1>
+
+
+  <!-- Display the transaction history -->
+  <h2>Transaction History</h2>
+  <table id="transaction-history">
+    <tr>
+      <th>Date</th>
+      <th>Amount</th>
+      <th>Reference</th>
+      <th>Type</th>
+      <th>Name</th>
+    </tr>
+  </table>
+
 </body>
 </html>
+
+
+  
+
+  <script>
+
+    // Get a reference to the transaction history table
+    const historyTable = document.querySelector('#transaction-history');
+   
+;
+    
+  // Load the transaction history from local storage and display it
+  const transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+  transactions.forEach(transaction => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${transaction.date}</td>
+      <td>${transaction.amount}</td>
+      <td>${transaction.reference}</td>
+      <td>${transaction.type}</td>
+      <td>${transaction.name}</td>
+    `;
+    historyTable.appendChild(row);
+  });
+
+</script>
+</body>
+</html>
+
