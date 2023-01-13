@@ -243,5 +243,34 @@ if (dateGrouping === "month") {
     `;
   }
 
+  function GetPre(){
+
+    let preTr = [];
+    let previousBalance=0;
+    preTransactions = transactions.filter(transaction => {
+      
+      if(new Date(transaction.date) < new Date(startdate)){
+        preTr.push(transaction);
+      }
+    });
+    
+    for (let index = 0; index < preTr.length; index++) {
+      var element = preTr[index].amount*1;
+      if(preTr[index].type=='credit'){
+        previousBalance = previousBalance+element;
+      }else{
+        previousBalance = previousBalance-element;
+      }
+    }
+    console.log(previousBalance);
+    const img = document.createElement("h1");
+    img.textContent=previousBalance;
+    img.style='color:red';
+    const previousB = document.getElementById("prebalance");
+    previousB.innerHTML="";
+    previousB.appendChild(img);
+  }
+  GetPre();
+
 });
 </script>
