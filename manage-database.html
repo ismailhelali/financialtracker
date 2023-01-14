@@ -36,7 +36,7 @@
       </tbody>
     </table>
    
-    <script>
+<script>
     window.onload = function() {
         let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
         displayTransactions(transactions);
@@ -85,7 +85,7 @@ function displayTransactions(transactions) {
   localStorage.setItem("transactions", JSON.stringify(transactions));
 
   // Redisplay the transactions in the table
-  displayTransactions();
+  displayTransactions(transactions);
 };
           let deleteButton = document.createElement("button");
           deleteButton.innerHTML = "Delete";
@@ -102,7 +102,7 @@ function displayTransactions(transactions) {
     localStorage.setItem("transactions", JSON.stringify(transactions));
 
     // Redisplay the transactions in the table
-    displayTransactions();
+    displayTransactions(transactions);
   }
 };
           actionsCell.appendChild(editButton);
@@ -116,8 +116,22 @@ function displayTransactions(transactions) {
           transactionsBody.appendChild(row);
         }
       }
+
+      // Function to search for transactions
+      function search() {
+        // Get the search input
+        let searchInput = document.getElementById("searchInput").value;
+
+        // Filter the transactions
+        let filteredTransactions = transactions.filter(transaction => {
+          return transaction.name.toLowerCase().includes(searchInput.toLowerCase()) ||
+            transaction.reference.toLowerCase().includes(searchInput.toLowerCase());
+        });
+
+        // Display the filtered transactions
+        displayTransactions(filteredTransactions);
+      }
     </script>
-    
   </body>
 </html>
 
