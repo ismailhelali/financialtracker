@@ -38,7 +38,7 @@
    
       <script>
     window.onload = function() {
-        let transactions = JSON.parse(localStorage.getItem("transactions"));
+  let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
         displayTransactions();
     }
 </script>
