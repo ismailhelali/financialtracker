@@ -133,6 +133,46 @@
       <th>Name</th>
     </tr>
   </table>
+<br><br><table id="transactions-table">
+    <tr>
+        <th>Date</th>
+        <th>Amount</th>
+        <th>Reference</th>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Actions</th>
+    </tr>
+</table>
+<script>
+function displayTransactions() {
+    console.log(transactions);
+    transactions.forEach((transaction,index) => {
+        console.log(transaction);
+        let editBtn = document.createElement("button");
+        editBtn.innerHTML = "Edit";
+        editBtn.className = "edit-button";
+        editBtn.setAttribute('onclick', `editTransaction(${index})`);
+        let deleteBtn = document.createElement("button");
+        deleteBtn.innerHTML = "Delete";
+        deleteBtn.className = "delete-button";
+        deleteBtn.setAttribute('onclick', `deleteTransaction(${index})`);
+        console.log(editBtn);
+        console.log(deleteBtn);
+    });
+}
+
+
+function editTransaction(index) {
+    let transaction = transactions[index];
+    // code to edit the transaction object
+    localStorage.setItem('transactions', JSON.stringify(transactions));
+}
+
+function deleteTransaction(index) {
+    transactions.splice(index, 1);
+    localStorage.setItem('transactions', JSON.stringify(transactions));
+}
+</script>
 
 !-- Footer -->
 <div class="footer">
