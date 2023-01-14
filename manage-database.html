@@ -32,14 +32,10 @@ th {
       <tbody id="transactions-body"></tbody>
     </table>
     <input type="text" id="search-input" placeholder="Search">
-    <button id="save-btn" onclick="saveTransactions()">Save Transactions</button>
     <button id="search-button">Search</button>
     <script>
       
-  function saveTransactions() {
-  localStorage.setItem("transactions", JSON.stringify(transactions));
-  displayTransactions(transactions);
-} 
+
     //Retrieve the data from local storage
 window.onload = function() {
   let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
