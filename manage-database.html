@@ -67,26 +67,61 @@ function displayTransactions(transactions) {
   // Get the index of the transaction to be edited
   let index = transactions.indexOf(transaction);
 
-  // Get the new values for the transaction
-  let newDate = prompt("Enter the new date:");
-  let newAmount = prompt("Enter the new amount:");
-  let newReference = prompt("Enter the new reference:");
-  let newType = prompt("Enter the new type:");
-  let newName = prompt("Enter the new name:");
+  // Get the index of the transaction to be edited
+  let index = transactions.indexOf(transaction);
 
-  // Update the transaction in the array
-  transactions[index].date = newDate;
-  transactions[index].amount = newAmount;
-  transactions[index].reference = newReference;
-  transactions[index].type = newType;
-  transactions[index].name = newName;
+  var options = ["Date", "Amount", "Reference","Type","Name"];
+var select = document.createElement("select");
 
-  // Update the transaction in local storage
-  localStorage.setItem("transactions", JSON.stringify(transactions));
+for (var i = 0; i < options.length; i++) {
+    var option = document.createElement("option");
+    option.value = options[i];
+    option.text = options[i];
+    select.appendChild(option);
+}
 
-  // Redisplay the transactions in the table
-  displayTransactions(transactions);
-};
+var prompt = window.prompt("Please select an option:", "");
+if (prompt) {
+    var selectedOption = select.options[select.selectedIndex].text;
+    console.log("Selected option: " + selectedOption);
+
+    if (selectedOption === "Date") {
+let newDate = prompt("Enter the new date:");
+let date = new Date(newDate);
+let formattedDate = date.toISOString().slice(0, 10);
+transactions[index].date = formattedDate;
+
+    } else if (selectedOption === "Amount") {
+        let newAmount = prompt("Enter the new amount:");
+        transactions[index].amount = newAmount;
+    } else if (selectedOption === "Reference") {
+        let newReference = prompt("Enter the new reference:");
+        transactions[index].reference = newReference;
+    } else if (selectedOption === "Type") {
+        var types = ["debit", "credit"];
+        var selecttype = document.createElement("select");
+
+        for (var i = 0; i < types.length; i++) {
+            var option = document.createElement("option");
+            option.value = types[i];
+            option.text = types[i];
+            selecttype.appendChild(option);
+        }
+
+        var prompt = window.prompt("Please select a type:", "");
+        if (prompt) {
+            var selectedType = selecttype.options[selecttype.selectedIndex].text;
+            console.log("Selected type: " + selectedType);
+            transactions[index].type = selectedType;
+        }
+    } else if (selectedOption === "Name") {
+        let newName = prompt("Enter the new name:");
+        transactions[index].name = newName;
+    }
+}
+localStorage.setItem("transactions", JSON.stringify(transactions));
+displayTransactions(transactions);
+
           let deleteButton = document.createElement("button");
           deleteButton.innerHTML = "Delete";
           deleteButton.onclick = function() {
