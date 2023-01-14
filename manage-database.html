@@ -36,10 +36,10 @@
       </tbody>
     </table>
    
-      <script>
+    <script>
     window.onload = function() {
-  let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
-        displayTransactions();
+        let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+        displayTransactions(transactions);
     }
 </script>
  <script>
