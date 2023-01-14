@@ -35,10 +35,14 @@
         <!-- Data from local storage will be inserted here -->
       </tbody>
     </table>
-    <script>
-      // Retrieve data from local storage
-      let transactions = JSON.parse(localStorage.getItem("transactions"));
-
+   
+      <script>
+    window.onload = function() {
+        let transactions = JSON.parse(localStorage.getItem("transactions"));
+        displayTransactions();
+    }
+</script>
+ <script>
       // Function to display data in table
       function displayTransactions() {
         let transactionsBody = document.getElementById("transactionsBody");
