@@ -38,24 +38,48 @@ th {
     <script>
           //save editing to localstorage
 
-      let saveButton = document.getElementById("save-button");
-     saveButton.addEventListener("click", function() {
+     let saveButton = document.getElementById("save-button");
+saveButton.addEventListener("click", function() {
     let updatedTransactions = [];
     let tableRows = document.querySelectorAll("#transactions-table tbody tr");
 
     tableRows.forEach(function(row) {
         let transaction = {};
         let cells = row.querySelectorAll("td");
-        transaction.date = cells[0].innerHTML;
-        transaction.amount = cells[1].innerHTML;
-        transaction.reference = cells[2].innerHTML;
-        transaction.type = cells[3].innerHTML;
-        transaction.name = cells[4].innerHTML;
+        let dateInput = cells[0].querySelector("input");
+        if (dateInput) {
+            transaction.date = dateInput.value;
+        } else {
+            transaction.date = cells[0].innerHTML;
+        }
+        let amountInput = cells[1].querySelector("input");
+        if (amountInput) {
+            transaction.amount = amountInput.value;
+        } else {
+            transaction.amount = cells[1].innerHTML;
+        }
+        let referenceInput = cells[2].querySelector("input");
+        if (referenceInput) {
+            transaction.reference = referenceInput.value;
+        } else {
+            transaction.reference = cells[2].innerHTML;
+        }
+        let typeSelect = cells[3].querySelector("select");
+        if (typeSelect) {
+            transaction.type = typeSelect.value;
+        } else {
+            transaction.type = cells[3].innerHTML;
+        }
+        let nameInput = cells[4].querySelector("input");
+        if (nameInput) {
+            transaction.name = nameInput.value;
+        } else {
+            transaction.name = cells[4].innerHTML;
+        }
         updatedTransactions.push(transaction);
     });
-
     localStorage.setItem('transactions', JSON.stringify(updatedTransactions));
-     });
+});
 
 
     //Retrieve the data from local storage
