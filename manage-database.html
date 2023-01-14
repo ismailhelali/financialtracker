@@ -2,130 +2,139 @@
 <html>
   <head>
     <style>
-      /* CSS for table styling */
       table {
-        font-family: arial, sans-serif;
-        border-collapse: collapse;
-        width: 100%;
-      }
-      td, th {
-        border: 1px solid #dddddd;
-        text-align: left;
-        padding: 8px;
-      }
-      th {
-        background-color: #dddddd;
-      }
-    </style>
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  border: 1px solid black;
+  padding: 8px;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+    </style>  
   </head>
   <body>
-    <div>
-      <input type="text" id="searchInput" placeholder="Search..." onkeyup="search()">
-    </div>
-    <table id="transactionsTable">
-      <tr>
-        <th>Date</th>
-        <th>Amount</th>
-        <th>Reference</th>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Actions</th>
-      </tr>
-      <tbody id="transactionsBody">
-        <!-- Data from local storage will be inserted here -->
-      </tbody>
+    <table id="transactions-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Amount</th>
+          <th>Reference</th>
+          <th>Type</th>
+          <th>Name</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="transactions-body"></tbody>
     </table>
+    <input type="text" id="search-input" placeholder="Search">
+    <button id="search-button">Search</button>
+    <script>
+    //Retrieve the data from local storage
+window.onload = function() {
+  let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+  displayTransactions(transactions);
+}
 
-<script>
-  window.onload = function() {
-    let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
-    displayTransactions(transactions);
-  }
-  
-  // Function to display data in table
-  function displayTransactions(transactions) {
-    let transactionsBody = document.getElementById("transactionsBody");
-    transactionsBody.innerHTML = "";
-    for (let i = 0; i < transactions.length; i++) {
-      let transaction = transactions[i];
-      let row = document.createElement("tr");
-      let dateCell = document.createElement("td");
-      dateCell.innerHTML = transaction.date;
-      let amountCell = document.createElement("td");
-      amountCell.innerHTML = transaction.amount;
-      let referenceCell = document.createElement("td");
-      referenceCell.innerHTML = transaction.reference;
-      let typeCell = document.createElement("td");
-      typeCell.innerHTML = transaction.type;
-      let nameCell = document.createElement("td");
-      nameCell.innerHTML = transaction.name;
-      let actionsCell = document.createElement("td");
-      let editButton = document.createElement("button");
-      editButton.innerHTML = "Edit";
-     
-editButton.onclick = function() {
-// Get the index of the transaction to be edited
-let index = transactions.indexOf(transaction);
-
-    // Create a dropdown menu for selecting the field to edit
-    var options = ["Date", "Amount", "Reference","Type","Name"];
-    var select = document.createElement("select");
-
-    for (var i = 0; i < options.length; i++) {
-        var option = document.createElement("option");
-        option.value = options[i];
-        option.text = options[i];
-        select.appendChild(option);
-    }
-    select.id = "select";
-    select.onchange = function(){
-        let selectedOption = this.options[this.selectedIndex].text;
-        let newValue = prompt("Enter the new " + selectedOption);
-        if(selectedOption === "Date"){
-            transactions[index].date = newValue;
-        }else if(selectedOption === "Amount"){
-            transactions[index].amount = newValue;
-        }else if(selectedOption === "Reference"){
-            transactions[index].reference = newValue;
-        }else if(selectedOption === "Type"){
-            transactions[index].type = newValue;
-        }else if(selectedOption === "Name"){
-            transactions[index].name = newValue;
-        }
-        localStorage.setItem("transactions", JSON.stringify(transactions));
-        displayTransactions(transactions);
-    }
-    actionsCell.appendChild(select);
-
-    row.appendChild(dateCell);
-    row.appendChild(amountCell);
-    row.appendChild(referenceCell);
-    row.appendChild(typeCell);
-    row.appendChild(nameCell);
-    row.appendChild(actionsCell);
-
-    transactionsBody.appendChild(row);
+//Function to display the transactions in a table
+function displayTransactions(transactions) {
+  let tableBody = document.getElementById('transactions-body');
+  tableBody.innerHTML = '';
+  for (let i = 0; i < transactions.length; i++) {
+    let row = document.createElement('tr');
+    let date = document.createElement('td');
+    date.innerHTML = transactions[i].date;
+    let amount = document.createElement('td');
+    amount.innerHTML = transactions[i].amount;
+    let reference = document.createElement('td');
+    reference.innerHTML = transactions[i].reference;
+    let type = document.createElement('td');
+    type.innerHTML = transactions[i].type;
+    let name = document.createElement('td');
+    name.innerHTML = transactions[i].name;
+    let actions = document.createElement('td');
+    let editButton = document.createElement('button');
+    editButton.innerHTML = 'Edit';
+    editButton.onclick = function() {
+      //Prompt the user to choose which column to edit
+      let columnToEdit = prompt('Which column would you like to edit? (date, amount, reference, type, name)');
+      if (columnToEdit == 'date') {
+        //Create a date input for editing the date column
+        let dateInput = document.createElement('input');
+        dateInput.type = 'date';
+        dateInput.value = transactions[i].date;
+        date.innerHTML = '';
+        date.appendChild(dateInput);
+      } else if (columnToEdit == 'amount') {
+        //Create a text input for editing the amount column
+let amountInput = document.createElement('input');
+amountInput.type = 'text';
+amountInput.value = transactions[i].amount;
+amount.innerHTML = '';
+amount.appendChild(amountInput);
+} else if (columnToEdit == 'reference') {
+//Create a text input for editing the reference column
+let referenceInput = document.createElement('input');
+referenceInput.type = 'text';
+referenceInput.value = transactions[i].reference;
+reference.innerHTML = '';
+reference.appendChild(referenceInput);
+} else if (columnToEdit == 'type') {
+//Create a select input for editing the type column
+let typeSelect = document.createElement('select');
+let debitOption = document.createElement('option');
+debitOption.value = 'debit';
+debitOption.innerHTML = 'Debit';
+let creditOption = document.createElement('option');
+creditOption.value = 'credit';
+creditOption.innerHTML = 'Credit';
+typeSelect.appendChild(debitOption);
+typeSelect.appendChild(creditOption);
+type.innerHTML = '';
+type.appendChild(typeSelect);
+} else if (columnToEdit == 'name') {
+//Create a text input for editing the name column
+let nameInput = document.createElement('input');
+nameInput.type = 'text';
+nameInput.value = transactions[i].name;
+name.innerHTML = '';
+name.appendChild(nameInput);
 }
 }
-function search() {
-var input, filter, table, tr, td, i, txtValue;
-input = document.getElementById("searchInput");
-filter = input.value.toUpperCase();
-table = document.getElementById("transactionsTable");
-tr = table.getElementsByTagName("tr");
-for (i = 0; i < tr.length; i++) {
-td = tr[i].getElementsByTagName("td")[0];
-if (td) {
-txtValue = td.textContent || td.innerText;
-if (txtValue.toUpperCase().indexOf(filter) > -1) {
-tr[i].style.display = "";
-} else {
-tr[i].style.display = "none";
+let deleteButton = document.createElement('button');
+deleteButton.innerHTML = 'Delete';
+deleteButton.onclick = function() {
+//Remove the transaction from the array and local storage
+transactions.splice(i, 1);
+localStorage.setItem('transactions', JSON.stringify(transactions));
+//Update the table to reflect the deletion
+displayTransactions(transactions);
+}
+actions.appendChild(editButton);
+actions.appendChild(deleteButton);
+row.appendChild(date);
+row.appendChild(amount);
+row.appendChild(reference);
+row.appendChild(type);
+row.appendChild(name);
+row.appendChild(actions);
+tableBody.appendChild(row);
 }
 }
-}
-}
-</script>
 
-</body>
+//Search function
+let searchButton = document.getElementById('search-button');
+searchButton.onclick = function() {
+let searchValue = document.getElementById('search-input').value;
+let filteredTransactions = transactions.filter(function(transaction) {
+return transaction.date.includes(searchValue) || transaction.amount.toString().includes(searchValue) || transaction.reference.includes(searchValue) || transaction.type.includes(searchValue) || transaction.name.includes(searchValue);
+});
+displayTransactions(filteredTransactions);
+}
+    </script>
+  </body>
 </html>
