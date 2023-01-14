@@ -31,10 +31,32 @@ th {
       </thead>
       <tbody id="transactions-body"></tbody>
     </table>
+    <button id="save-button">Save</button>
+
     <input type="text" id="search-input" placeholder="Search">
     <button id="search-button">Search</button>
     <script>
-      
+          //save editing to localstorage
+
+      let saveButton = document.getElementById("save-button");
+     saveButton.addEventListener("click", function() {
+    let updatedTransactions = [];
+    let tableRows = document.querySelectorAll("#transactions-table tbody tr");
+
+    tableRows.forEach(function(row) {
+        let transaction = {};
+        let cells = row.querySelectorAll("td");
+        transaction.date = cells[0].innerHTML;
+        transaction.amount = cells[1].innerHTML;
+        transaction.reference = cells[2].innerHTML;
+        transaction.type = cells[3].innerHTML;
+        transaction.name = cells[4].innerHTML;
+        updatedTransactions.push(transaction);
+    });
+
+    localStorage.setItem('transactions', JSON.stringify(updatedTransactions));
+     });
+
 
     //Retrieve the data from local storage
 window.onload = function() {
