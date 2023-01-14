@@ -104,6 +104,8 @@ nameInput.value = transactions[i].name;
 name.innerHTML = '';
 name.appendChild(nameInput);
 }
+      localStorage.setItem("transactions", JSON.stringify(transactions));
+      displayTransactions(transactions);
 }
 let deleteButton = document.createElement('button');
 deleteButton.innerHTML = 'Delete';
