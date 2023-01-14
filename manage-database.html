@@ -78,46 +78,46 @@
             }
 
             var prompt = window.prompt("Please select a field to edit:", "");
-if (prompt) {
-var selectedOption = select.options[select.selectedIndex].text;
-console.log("Selected option: " + selectedOption);
-
-Copy code
-            if (selectedOption === "Date") {
-                let newDate = prompt("Enter the new date:");
-                transactions[index].date = newDate;
-            } else if (selectedOption === "Amount") {
-                let newAmount = prompt("Enter the new amount:");
-                transactions[index].amount = newAmount;
-            } else if (selectedOption === "Reference") {
-                let newReference = prompt("Enter the new reference:");
-                transactions[index].reference = newReference;
-            } else if (selectedOption === "Type") {
-                var types = ["debit", "credit"];
-                var selecttype = document.createElement("select");
-
-                for (var i = 0; i < types.length; i++) {
-                    var option = document.createElement("option");
-                    option.value = types[i];
-                    option.text = types[i];
-                    selecttype.appendChild(option);
-                }
-
-                var prompt = window.prompt("Please select a type:", "");
                 if (prompt) {
-                    var selectedType = selecttype.options[selecttype.selectedIndex].text;
-                    transactions[index].type = selectedType;
-                }
-            } else if (selectedOption === "Name") {
-                let newName = prompt("Enter the new name:");
-                transactions[index].name = newName;
-            }
+                var selectedOption = select.options[select.selectedIndex].text;
+                console.log("Selected option: " + selectedOption);
 
-            // Update local storage and re-display transactions
-            localStorage.setItem('transactions', JSON.stringify(transactions));
-            displayTransactions(transactions);
-        }
-      }
+                if (selectedOption === "Date") {
+                    let newDate = prompt("Enter the new date:");
+                    transactions[index].date = newDate;
+                } else if (selectedOption === "Amount") {
+                    let newAmount = prompt("Enter the new amount:");
+                    transactions[index].amount = newAmount;
+                } else if (selectedOption === "Reference") {
+                    let newReference = prompt("Enter the new reference:");
+                    transactions[index].reference = newReference;
+                } else if (selectedOption === "Type") {
+                    var types = ["debit", "credit"];
+                    var selecttype = document.createElement("select");
+
+                    for (var i = 0; i < types.length; i++) {
+                        var option = document.createElement("option");
+                        option.value = types[i];
+                        option.text = types[i];
+                        selecttype.appendChild(option);
+                    }
+
+                    var prompt = window.prompt("Please select a type:", "");
+                    if (prompt) {
+                        var selectedType = selecttype.options[selecttype.selectedIndex].text;
+                        transactions[index].type = selectedType;
+                    }
+                } else if (selectedOption === "Name") {
+                    let newName = prompt("Enter the new name:");
+                    transactions[index].name = newName;
+                }
+
+                // Update local storage and re-display transactions
+                localStorage.setItem('transactions', JSON.stringify(transactions));
+                displayTransactions(transactions);
+            }
+          }
+
       actionsCell.appendChild(editButton);
       row.appendChild(dateCell);
       row.appendChild(amountCell);
