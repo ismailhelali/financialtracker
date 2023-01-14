@@ -44,8 +44,8 @@
 </script>
  <script>
       // Function to display data in table
-      function displayTransactions() {
-        let transactionsBody = document.getElementById("transactionsBody");
+function displayTransactions(transactions) {
+  let transactionsBody = document.getElementById("transactionsBody");
         transactionsBody.innerHTML = "";
         for (let i = 0; i < transactions.length; i++) {
           let transaction = transactions[i];
