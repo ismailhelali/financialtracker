@@ -35,17 +35,16 @@
         <!-- Data from local storage will be inserted here -->
       </tbody>
     </table>
-   
-<script>
-    window.onload = function() {
+
+    <script>
+      window.onload = function() {
         let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
         displayTransactions(transactions);
-    }
-</script>
- <script>
+      }
+      
       // Function to display data in table
-function displayTransactions(transactions) {
-  let transactionsBody = document.getElementById("transactionsBody");
+      function displayTransactions(transactions) {
+        let transactionsBody = document.getElementById("transactionsBody");
         transactionsBody.innerHTML = "";
         for (let i = 0; i < transactions.length; i++) {
           let transaction = transactions[i];
@@ -64,90 +63,71 @@ function displayTransactions(transactions) {
           let editButton = document.createElement("button");
           editButton.innerHTML = "Edit";
           editButton.onclick = function() {
-  // Get the index of the transaction to be edited
-  let index = transactions.indexOf(transaction);
+            // Get the index of the transaction to be edited
+            let index = transactions.indexOf(transaction);
 
+            // Create a dropdown menu for selecting the field to edit
+            var options = ["Date", "Amount", "Reference","Type","Name"];
+            var select = document.createElement("select");
 
-  var options = ["Date", "Amount", "Reference","Type","Name"];
-var select = document.createElement("select");
+            for (var i = 0; i < options.length; i++) {
+                var option = document.createElement("option");
+                option.value = options[i];
+                option.text = options[i];
+                select.appendChild(option);
+            }
 
-for (var i = 0; i < options.length; i++) {
-    var option = document.createElement("option");
-    option.value = options[i];
-    option.text = options[i];
-    select.appendChild(option);
-}
-
-var prompt = window.prompt("Please select an option:", "");
+            var prompt = window.prompt("Please select a field to edit:", "");
 if (prompt) {
-    var selectedOption = select.options[select.selectedIndex].text;
-    console.log("Selected option: " + selectedOption);
+var selectedOption = select.options[select.selectedIndex].text;
+console.log("Selected option: " + selectedOption);
 
-    if (selectedOption === "Date") {
-        let newDate = prompt("Enter the new date:");
-        transactions[index].date = newDate;
-    } else if (selectedOption === "Amount") {
-        let newAmount = prompt("Enter the new amount:");
-        transactions[index].amount = newAmount;
-    } else if (selectedOption === "Reference") {
-        let newReference = prompt("Enter the new reference:");
-        transactions[index].reference = newReference;
-    } else if (selectedOption === "Type") {
-        var types = ["debit", "credit"];
-        var selecttype = document.createElement("select");
+Copy code
+            if (selectedOption === "Date") {
+                let newDate = prompt("Enter the new date:");
+                transactions[index].date = newDate;
+            } else if (selectedOption === "Amount") {
+                let newAmount = prompt("Enter the new amount:");
+                transactions[index].amount = newAmount;
+            } else if (selectedOption === "Reference") {
+                let newReference = prompt("Enter the new reference:");
+                transactions[index].reference = newReference;
+            } else if (selectedOption === "Type") {
+                var types = ["debit", "credit"];
+                var selecttype = document.createElement("select");
 
-        for (var i = 0; i < types.length; i++) {
-            var option = document.createElement("option");
-            option.value = types[i];
-            option.text = types[i];
-            selecttype.appendChild(option);
+                for (var i = 0; i < types.length; i++) {
+                    var option = document.createElement("option");
+                    option.value = types[i];
+                    option.text = types[i];
+                    selecttype.appendChild(option);
+                }
+
+                var prompt = window.prompt("Please select a type:", "");
+                if (prompt) {
+                    var selectedType = selecttype.options[selecttype.selectedIndex].text;
+                    transactions[index].type = selectedType;
+                }
+            } else if (selectedOption === "Name") {
+                let newName = prompt("Enter the new name:");
+                transactions[index].name = newName;
+            }
+
+            // Update local storage and re-display transactions
+            localStorage.setItem('transactions', JSON.stringify(transactions));
+            displayTransactions(transactions);
         }
-
-        var prompt = window.prompt("Please select a type:", "");
-        if (prompt) {
-            var selectedType = selecttype.options[selecttype.selectedIndex].text;
-            console.log("Selected type: " + selectedType);
-            transactions[index].type = selectedType;
-        }
-    } else if (selectedOption === "Name") {
-        let newName = prompt("Enter the new name:");
-        transactions[index].name = newName;
+      }
+      actionsCell.appendChild(editButton);
+      row.appendChild(dateCell);
+      row.appendChild(amountCell);
+      row.appendChild(referenceCell);
+      row.appendChild(typeCell);
+      row.appendChild(nameCell);
+      row.appendChild(actionsCell);
+      transactionsBody.appendChild(row);
     }
-}
-localStorage.setItem("transactions", JSON.stringify(transactions));
-displayTransactions(transactions);
-
-};
-          localStorage.setItem('transactions', JSON.stringify(transactions));
-displayTransactions(transactions);
-
-          actionsCell.appendChild(editButton);
-          actionsCell.appendChild(deleteButton);
-          row.appendChild(dateCell);
-          row.appendChild(amountCell);
-          row.appendChild(referenceCell);
-          row.appendChild(typeCell);
-          row.appendChild(nameCell);
-          row.appendChild(actionsCell);
-          transactionsBody.appendChild(row);
-        }
-      }
-
-      // Function to search for transactions
-      function search() {
-        // Get the search input
-        let searchInput = document.getElementById("searchInput").value;
-
-        // Filter the transactions
-        let filteredTransactions = transactions.filter(transaction => {
-          return transaction.name.toLowerCase().includes(searchInput.toLowerCase()) ||
-            transaction.reference.toLowerCase().includes(searchInput.toLowerCase());
-        });
-
-        // Display the filtered transactions
-        displayTransactions(filteredTransactions);
-      }
-    </script>
+  }
+</script>
   </body>
 </html>
-
