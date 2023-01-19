@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Food Gallery</title>
+    <style>
+      /* Navbar container */
+.navbar {
+  overflow: hidden;
+  background-color: #333;
+  font-family: Arial;
+}
+
+/* Links inside the navbar */
+.navbar a {
+  float: left;
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+/* The dropdown container */
+.dropdown {
+  float: left;
+  overflow: hidden;
+}
+
+/* Dropdown button */
+.dropdown .dropbtn {
+  font-size: 16px;
+  border: none;
+  outline: none;
+  color: white;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit; /* Important for vertical align on mobile phones */
+  margin: 0; /* Important for vertical align on mobile phones */
+}
+
+/* Add a red background color to navbar links on hover */
+.navbar a:hover, .dropdown:hover .dropbtn {
+  background-color: red;
+}
+
+/* Dropdown content (hidden by default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+/* Add a grey background color to dropdown links on hover */
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+      
+      /* page d'acuille Cover photo with text in the center */
+      .cover-photo {
+        background-image: url("cover-photo.jpg");
+        background-size: cover;
+        height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .cover-photo h1 {
+        font-size: 36px;
+        color: white;
+        text-shadow: 2px 2px #333;
+      }
+      
+      /* Food gallery */
+      .food-gallery {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+      .food-card {
+        width: 25%;
+        padding: 10px;
+      }
+      /* Responsive design for small devices */
+      @media (max-width: 768px) {
+        .food-card {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    
+    
+<div class="navbar">
+  <a href="#home">Home</a>
+  <a href="#news">News</a>
+  <div class="dropdown">
+    <button class="dropbtn">Espace Client
+      <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-content">
+      <a href="#">Notre Gamme de Produits</a>
+      <a href="#">Devis Personnalisé</a>
+      <a href="#">Fiche Client</a>
+    </div>
+  </div>
+</div>
+    
+    <div class="cover-photo">
+      <h1>Welcome to our Food Gallery</h1>
+    </div>
+    <div class="food-gallery">
+      <div class="food-card">
+        <img src="food1.jpg" alt="Food 1">
+        <h2>Food 1</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
+      </div>
+      <div class="food-card">
+        <img src="food2.jpg" alt="Food 2">
+        <h2>Food 2</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
+      </div>
+      <!-- Add additional food cards for the remaining 8 pictures -->
+    </div>
+    <div class="testimony-block">
+      <h2>Testimonies</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
+    </div>
+  </body>
+</html>
+
+
+
+
+
