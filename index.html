@@ -1,171 +1,75 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Financial Tracker</title>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
-
-  <style>
-
-/* Navigation Bar */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #333;
-  color: #fff;
-  height: 50px;
-  padding: 0 20px;
-}
-
-.navbar a {
-  color: #fff;
-  text-decoration: none;
-  font-size: 18px;
-  margin: 0 20px;
-  transition: all 0.3s ease;
-}
-
-.navbar a:hover {
-  color: #ddd;
-}
-
-.navbar a.active {
-  color: #ffa500;
-  font-weight: bold;
-}
-
-.navbar .logo {
-  font-size: 22px;
-  font-weight: bold;
-  margin: 0;
-}
-
-/* Footer */
-.footer {
-  background-color: #333;
-  color: #fff;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.footer p {
-  margin: 0;
-  font-size: 14px;
-}
-
-.footer a {
-  color: #ddd;
-  text-decoration: none;
-  margin: 0 10px;
-  transition: all 0.3s ease;
-}
-
-.footer a:hover {
-  color: #ffa500;
-}
-.welcome-message {
-  font-family: 'Lato', sans-serif;
-  font-size: 24px;
-  color: #333333;
-  text-align: center;
-  margin: 30px 0;
-}
-
-.features {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  margin: 30px 0;
-}
-
-.feature {
-  width: 30%;
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.feature-icon {
-  font-size: 48px;
-  color: #00b8d4;
-}
-
-.feature-title {
-  font-family: 'Open Sans', sans-serif;
-  font-size: 18px;
-  color: #444444;
-  margin: 10px 0;
-}
-
-.feature-description {
-  font-size: 14px;
-  color: #666666;
-}
-
-.feature {
-  /* ... */
-  transition: all 0.5s ease-in-out;
-}
-
-.feature:hover {
-  transform: scale(1.1);
-}
-
-  </style>
+    <title>Memo Information PDF Generator</title>
+    <style>
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        input[type="text"], textarea {
+            display: block;
+            width: 100%;
+            padding: 5px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #3e8e41;
+        }
+    </style>
 </head>
 <body>
-
-<!-- Navigation Bar -->
-<div class="navbar">
-  <a href="/">Home</a>
-  <a href="data-input">Data Entry</a>
-  <a href="balance">Daily Balance</a>
-  <a href="about">About</a>
-  <a href="dashboard">Dashboard</a>
-  <a href="echeance">Echeance Calculator</a>
-  <a href="/instagram">Instagram</a>
-</div>
-
-<div class="welcome-message">Bienvenue sur notre site de suivi financier !</div>
-
-<div class="features">
-  <div class="feature">
-    <i class="feature-icon fas fa-calendar-alt"></i>
-    <h3 class="feature-title">Suivi de transactions</h3>
-    <p class="feature-description">Suivez toutes vos transactions financières, du présent jusqu'à une date future de votre choix.</p>
-  </div>
-  <div class="feature">
-    <i class="feature-icon fas fa-calculator"></i>
-    <h3 class="feature-title">Calculateur de solde</h3>
-    <p class="feature-description">Prévenez les problèmes financiers à venir et anticipez les besoins financiers grâce à notre calculateur de solde prévisionnel jour par jour.</p>
-  </div>
-  <div class="feature">
-    <i class="feature-icon fas fa-tachometer-alt"></i>
-    <h3 class="feature-title">Tableau de bord</h3>
-    <p class="feature-description">Obtenez une vue d'ensemble claire de votre situation financière grâce à notre tableau de bord sophistiqué.</p>
-  </div>
-  <div class="feature">
-    <i class="feature-icon fas fa-lock"></i>
-    <h3 class="feature-title">Sécurité</h3>
-    <p class="feature-description">Vos informations sont stockées de manière sécurisée sur votre appareil et ne sont pas visibles par nos soins.</p>
-  </div>
-  
-<div class="feature">
-  <i class="feature-icon fas fa-code"></i>
-  <h3 class="feature-title">Code open source</h3>
-  <p class="feature-description">Notre application est open source, vous pouvez donc y contribuer ou l'utiliser à des fins personnelles.</p>
-</div>
-</div>
-
-<img src="https://raw.githubusercontent.com/ismailhelali/financialtracker/main/DALL%C2%B7E%202023-01-09%2019.42.15%20-%20G%C3%A9n%C3%A8re%20une%20image%20d'une%20personne%20utilisant%20notre%20site%20pour%20suivre%20ses%20finances.%20Mettre%20en%20avant%20la%20simplicit%C3%A9%20la%20confidentialit%C3%A9%20et%20la%20rapidit%C3%A9%20de%20notr.png" alt="FinancialTracker" width="100%" height="auto">
-
-<!-- Footer -->
-<div class="footer">
-  <p>Open source web app created by ChatGPT. Original idea by Ismail Helali.</p>
-</div>
-
-
+    <h1>Memo Information PDF Generator</h1>
+    <form>
+        <label for="sujet">Sujet:</label>
+        <input type="text" id="sujet" name="sujet">
+        
+        <label for="sender">Sender:</label>
+        <input type="text" id="sender" name="sender">
+        
+        <label for="recipient">Recipient:</label>
+        <input type="text" id="recipient" name="recipient">
+        
+        <label for="body">Body:</label>
+        <textarea id="body" name="body" rows="5"></textarea>
+        
+        <label for="remarque">Remarque:</label>
+        <textarea id="remarque" name="remarque" rows="3"></textarea>
+        
+        <button type="button" onclick="generatePDF()">Generate PDF</button>
+    </form>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script>
+        function generatePDF() {
+            var sujet = document.getElementById("sujet").value;
+            var sender = document.getElementById("sender").value;
+            var recipient = document.getElementById("recipient").value;
+            var body = document.getElementById("body").value;
+            var remarque = document.getElementById("remarque").value;
+            
+            // Create the PDF content
+            var pdfContent = "To: " + recipient + "\n" +
+                             "From: " + sender + "\n" +
+                             "Subject: " + sujet + "\n\n" +
+                             body + "\n\n" +
+                             "Remarks: " + remarque;
+                             
+            // Generate the PDF document
+            var pdf = new jsPDF();
+            pdf.text(pdfContent, 10, 10);
+            pdf.save(sujet + ".pdf");
+        }
+    </script>
 </body>
 </html>
