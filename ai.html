@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Extraction de texte à partir d'une image</title>
+	<style>
+		img {
+			max-width: 100%;
+		}
+	</style>
+</head>
+<body>
+	<input type="file" onchange="readImage(event)">
+	<br>
+	<img id="imagePreview">
+	<br>
+	<button onclick="extractText()">Extraire le texte</button>
+	<br>
+	<textarea id="textPreview" cols="50" rows="10"></textarea>
+
+	<script src="https://cdn.jsdelivr.net/npm/tesseract.js@2.2.2/dist/tesseract.min.js"></script>
+	<script>
+		function readImage(event) {
+			var input = event.target;
+			var reader = new FileReader();
+			reader.onload = function(){
+				var dataURL = reader.result;
+				var imagePreview = document.getElementById("imagePreview");
+				imagePreview.src = dataURL;
+			};
+			reader.readAsDataURL(input.files[0]);
+		}
+		
+		function extractText() {
+			var imagePreview = document.getElementById("imagePreview");
+			Tesseract.recognize(imagePreview.src)
+				.progress(function(message){
+					console.log('progress', message);
+				})
+				.then(function(result){
+					var textPreview = document.getElementById("textPreview");
+					textPreview.value = result.text;
+				});
+		}
+	</script>
+</body>
+</html>
