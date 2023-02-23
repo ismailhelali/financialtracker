@@ -1,46 +1,134 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Extraction de texte à partir d'une image</title>
-	<style>
-		img {
-			max-width: 100%;
-		}
-	</style>
+  <title>Cheque OCR</title>
+  <style>
+    #upload-form {
+      margin: 50px auto;
+      max-width: 600px;
+      text-align: center;
+    }
+    #upload-form input[type=file] {
+      display: none;
+    }
+    #upload-form label {
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+      padding: 10px 20px;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+    #upload-form label:hover {
+      background-color: #3e8e41;
+    }
+    #upload-form #image-preview {
+      margin: 50px auto;
+      max-width: 600px;
+      text-align: center;
+    }
+    #upload-form #image-preview img {
+      max-width: 100%;
+    }
+    #upload-form #extracted-data {
+      margin: 50px auto;
+      max-width: 600px;
+      text-align: center;
+    }
+    #upload-form #extracted-data table {
+      margin: 0 auto;
+      border-collapse: collapse;
+    }
+    #upload-form #extracted-data th, #upload-form #extracted-data td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      font-size: 16px;
+    }
+    #upload-form #extracted-data th {
+      background-color: #f2f2f2;
+      text-align: left;
+    }
+  </style>
 </head>
 <body>
-	<input type="file" onchange="readImage(event)">
-	<br>
-	<img id="imagePreview">
-	<br>
-	<button onclick="extractText()">Extraire le texte</button>
-	<br>
-	<textarea id="textPreview" cols="50" rows="10"></textarea>
+  <form id="upload-form">
+    <input type="file" id="image-input" accept="image/*">
+    <label for="image-input">Upload Cheque Image</label>
+  </form>
 
-	<script src="https://cdn.jsdelivr.net/npm/tesseract.js@2.2.2/dist/tesseract.min.js"></script>
-	<script>
-		function readImage(event) {
-			var input = event.target;
-			var reader = new FileReader();
-			reader.onload = function(){
-				var dataURL = reader.result;
-				var imagePreview = document.getElementById("imagePreview");
-				imagePreview.src = dataURL;
-			};
-			reader.readAsDataURL(input.files[0]);
-		}
-		
-		function extractText() {
-			var imagePreview = document.getElementById("imagePreview");
-			Tesseract.recognize(imagePreview.src)
-				.progress(function(message){
-					console.log('progress', message);
-				})
-				.then(function(result){
-					var textPreview = document.getElementById("textPreview");
-					textPreview.value = result.text;
-				});
-		}
-	</script>
+  <div id="image-preview"></div>
+  <div id="extracted-data"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@2.0.0/dist/tesseract.js"></script>
+  <script src="cheque-ocr.js"></script>
 </body>
 </html>
+
+<script>
+	
+	const imageInput = document.getElementById('image-input');
+const imagePreview = document.getElementById('image-preview');
+const extractedData = document.getElementById('extracted-data');
+
+imageInput.addEventListener('change', async function() {
+  const file = imageInput.files[0];
+  if (!file) return;
+
+  const image = new Image();
+  image.src = URL.createObjectURL(file);
+  image.onload = async function() {
+    imagePreview.innerHTML = '';
+    imagePreview.appendChild(image);
+
+    const recognizedText = await recognizeHandwriting(image);
+    const { chequeAmount, payeeName, chequeNumber } = extractChequeData(recognizedText);
+
+    extractedData.innerHTML = `
+      <table>
+        <tr>
+          <th>Cheque Amount</th>
+          <td>${chequeAmount}</td>
+        </tr>
+        <tr>
+          <th>Payee Name</th>
+          <td>${payeeName}</td>
+        </tr>
+        <tr>
+          <th>Cheque Number</th>
+          <td>${chequeNumber}</td>
+        </tr>
+      </table>
+    `;
+  };
+});
+
+
+async function recognizeHandwriting(image) {
+const { data } = await Tesseract.recognize(
+image,
+'eng',
+{ logger: m => console.log(m) }
+);
+return data.text;
+}
+
+function extractChequeData(recognizedText) {
+const lines = recognizedText.split('\n');
+const data = {};
+
+for (let i = 0; i < lines.length; i++) {
+const line = lines[i].trim();
+if (!line) continue;
+
+if (line.match(/[\d,]+\.\d{2}/)) {
+  data.chequeAmount = line;
+} else if (line.match(/^Pay to the Order of /)) {
+  data.payeeName = line.replace(/^Pay to the Order of /, '');
+} else if (line.match(/^No. /)) {
+  data.chequeNumber = line.replace(/^No. /, '');
+}
+}
+
+return data;
+}
+	</script>	
