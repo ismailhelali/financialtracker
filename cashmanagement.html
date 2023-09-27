@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"> 
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -46,7 +46,7 @@
         <p id="ecart">N/A</p>
 
         <button onclick="saveTransactionsToFile()">Save Transactions to File</button>
-        <button onclick="retrieveTransactionsFromFile()">Retrieve Transactions from File</button>
+        <button onclick="loadTransactionsFromFile()">Load Transactions from File</button>
     </div>
 
     <script>
@@ -82,15 +82,35 @@
 
         function saveTransactionsToFile() {
             const transactionsJSON = JSON.stringify(transactions);
-            localStorage.setItem("cashTransactions", transactionsJSON);
+            const blob = new Blob([transactionsJSON], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "cash_transactions.json";
+            a.click();
+            
+            URL.revokeObjectURL(url);
         }
 
-        function retrieveTransactionsFromFile() {
-            const transactionsJSON = localStorage.getItem("cashTransactions");
-            if (transactionsJSON) {
-                transactions = JSON.parse(transactionsJSON);
-                calculateCashSummary();
-            }
+        function loadTransactionsFromFile() {
+            const fileInput = document.createElement("input");
+            fileInput.type = "file";
+            
+            fileInput.addEventListener("change", (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const transactionsJSON = event.target.result;
+                        transactions = JSON.parse(transactionsJSON);
+                        calculateCashSummary();
+                    };
+                    reader.readAsText(file);
+                }
+            });
+            
+            fileInput.click();
         }
     </script>
 </body>
