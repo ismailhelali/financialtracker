@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cash Management App</title>
+    <style>
+        /* Basic CSS styling */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cash Management App</h1>
+        <h2>Enter Daily Transactions</h2>
+
+        <label for="category">Category:</label>
+        <input type="text" id="category" placeholder="Transaction category"><br>
+
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount" placeholder="Transaction amount"><br>
+
+        <button onclick="recordTransaction()">Record Transaction</button>
+
+        <h2>Daily Cash Summary</h2>
+
+        <label for="encaissement">Total Encaissement:</label>
+        <input type="number" id="encaissement" placeholder="Total encaissement"><br>
+
+        <label for="solde-theorique">Solde Théorique:</label>
+        <input type="number" id="solde-theorique" placeholder="Solde théorique" disabled><br>
+
+        <label for="solde-physique">Solde Physique:</label>
+        <input type="number" id="solde-physique" placeholder="Solde physique"><br>
+
+        <h3>Écart:</h3>
+        <p id="ecart">N/A</p>
+    </div>
+
+    <script>
+        let transactions = [];
+        
+        function recordTransaction() {
+            const category = document.getElementById("category").value;
+            const amount = parseFloat(document.getElementById("amount").value);
+            transactions.push({ category, amount });
+            calculateCashSummary();
+            clearInputFields();
+        }
+        
+        function calculateCashSummary() {
+            const encaissement = transactions.reduce((total, transaction) => total + transaction.amount, 0);
+            const soldeTheorique = encaissement - calculateTotalDecaissement();
+            const soldePhysique = parseFloat(document.getElementById("solde-physique").value);
+            const ecart = soldePhysique - soldeTheorique;
+            
+            document.getElementById("encaissement").value = encaissement.toFixed(2);
+            document.getElementById("solde-theorique").value = soldeTheorique.toFixed(2);
+            document.getElementById("ecart").textContent = ecart.toFixed(2);
+        }
+        
+        function calculateTotalDecaissement() {
+            return transactions.reduce((total, transaction) => transaction.amount < 0 ? total + Math.abs(transaction.amount) : total, 0);
+        }
+        
+        function clearInputFields() {
+            document.getElementById("category").value = "";
+            document.getElementById("amount").value = "";
+        }
+    </script>
+</body>
+</html>
