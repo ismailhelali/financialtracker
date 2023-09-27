@@ -46,11 +46,12 @@
         <p id="ecart">N/A</p>
 
         <button onclick="saveTransactionsToFile()">Save Transactions to File</button>
+        <button onclick="retrieveTransactionsFromFile()">Retrieve Transactions from File</button>
     </div>
 
     <script>
         let transactions = [];
-        
+
         function recordTransaction() {
             const category = document.getElementById("category").value;
             const amount = parseFloat(document.getElementById("amount").value);
@@ -58,40 +59,38 @@
             calculateCashSummary();
             clearInputFields();
         }
-        
+
         function calculateCashSummary() {
             const encaissement = transactions.reduce((total, transaction) => total + transaction.amount, 0);
             const soldeTheorique = encaissement - calculateTotalDecaissement();
             const soldePhysique = parseFloat(document.getElementById("solde-physique").value);
             const ecart = soldePhysique - soldeTheorique;
-            
+
             document.getElementById("encaissement").value = encaissement.toFixed(2);
             document.getElementById("solde-theorique").value = soldeTheorique.toFixed(2);
             document.getElementById("ecart").textContent = ecart.toFixed(2);
         }
-        
+
         function calculateTotalDecaissement() {
             return transactions.reduce((total, transaction) => transaction.amount < 0 ? total + Math.abs(transaction.amount) : total, 0);
         }
-        
+
         function clearInputFields() {
             document.getElementById("category").value = "";
             document.getElementById("amount").value = "";
         }
-        
+
         function saveTransactionsToFile() {
             const transactionsJSON = JSON.stringify(transactions);
-            const fileContent = `const savedTransactions = ${transactionsJSON};`;
-            
-            const blob = new Blob([fileContent], { type: "application/javascript" });
-            const url = URL.createObjectURL(blob);
-            
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "transactions.js";
-            a.click();
-            
-            URL.revokeObjectURL(url);
+            localStorage.setItem("cashTransactions", transactionsJSON);
+        }
+
+        function retrieveTransactionsFromFile() {
+            const transactionsJSON = localStorage.getItem("cashTransactions");
+            if (transactionsJSON) {
+                transactions = JSON.parse(transactionsJSON);
+                calculateCashSummary();
+            }
         }
     </script>
 </body>
